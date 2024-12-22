@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class StockServiceImplementation implements StockService{
+public class StockServiceImplementation implements StockService {
 
     @Autowired
     StockRepository repository;
@@ -36,34 +36,36 @@ public class StockServiceImplementation implements StockService{
         LoginRequestBody requestBody = new LoginRequestBody();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("application/json"));
-        HttpEntity<LoginRequestBody> httpEntity = new HttpEntity<>(requestBody,headers);
+        HttpEntity<LoginRequestBody> httpEntity = new HttpEntity<>(requestBody, headers);
         ResponseEntity<TokenResponse> token = restTemplate.exchange(properties.getToken(),
-                HttpMethod.POST,httpEntity,TokenResponse.class);
+                HttpMethod.POST, httpEntity, TokenResponse.class);
 
         HttpHeaders headers1 = new HttpHeaders();
-        headers1.set("Authorization","Bearer " + token.getBody().getToken());
+        headers1.set("Authorization", "Bearer " + token.getBody().getToken());
         HttpEntity<?> httpEntity1 = new HttpEntity<>(headers1);
         ResponseEntity<MenuListResponse> menuList = restTemplate.exchange(properties.getDish_list(),
-                HttpMethod.GET,httpEntity1,MenuListResponse.class);
+                HttpMethod.GET, httpEntity1, MenuListResponse.class);
 
 
-        Map<String,Object> map =  (Map<String,Object>)  menuList.getBody().getResult();
+        Map<String, Object> map = (Map<String, Object>) menuList.getBody().getResult();
         List result = (List) map.get("menuList");
 
-        if(ObjectUtils.isEmpty(result)){
-            return  new ResponseEntity<>(
+        if (ObjectUtils.isEmpty(result)) {
+            return new ResponseEntity<>(
                     ApiResponse.builder().result(null).message("Menu List is Empty/null").Status(500).build(),
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
-        List<Map<String,Object>> list = (List<Map<String,Object>>) result;
-        for(Map<String,Object> map1 : list){
-            if(map1.get("dish").equals(request.getDish())){
-                repository.addStock(request.getStock(),request.getDish());
+        List<Map<String, Object>> list = (List<Map<String, Object>>) result;
+        for (Map<String, Object> map1 : list) {
+            if (map1.get("dish").equals(request.getDish())) {
+                repository.addStock(request.getStock(), request.getDish());
+                return new ResponseEntity<>(ApiResponse.prepareApiResponse("Stock Succesfully Updated"),
+                        HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>(ApiResponse.prepareApiResponse("Stock Succesfully Updated"),
-                HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.prepareApiResponse("Dish Currenlty not " +
+                "available in the Menu"), HttpStatus.BAD_REQUEST);
     }
 
 
