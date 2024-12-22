@@ -9,7 +9,4 @@ public class StockRequest {
 
     private Integer stock;
     private String dish;
-
-
-
 }

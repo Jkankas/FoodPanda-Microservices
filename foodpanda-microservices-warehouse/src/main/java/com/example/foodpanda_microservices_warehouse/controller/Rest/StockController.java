@@ -17,7 +17,7 @@ public class StockController {
         StockService service;
 
 
-        @PostMapping("addStock")
+        @PostMapping("/addStock")
         public ResponseEntity<ApiResponse> addStock(@RequestBody StockRequest request){
            return service.addStock(request);
         }
