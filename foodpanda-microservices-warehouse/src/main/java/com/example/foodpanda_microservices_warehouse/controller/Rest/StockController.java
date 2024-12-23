@@ -23,6 +23,9 @@ public class StockController {
         }
 
 
+
+
+
         @GetMapping("/fetchStock")
         public ResponseEntity<ApiResponse> fetchStock(){
                 ApiResponse response = service.fetchStock();
