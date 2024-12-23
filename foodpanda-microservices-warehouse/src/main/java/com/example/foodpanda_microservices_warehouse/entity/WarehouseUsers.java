@@ -2,9 +2,13 @@ package com.example.foodpanda_microservices_warehouse.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Builder
 @Entity
 @Data
 @NoArgsConstructor
@@ -21,4 +25,5 @@ public class WarehouseUsers {
     private String password;
     private String email;
     private String department;
+
 }

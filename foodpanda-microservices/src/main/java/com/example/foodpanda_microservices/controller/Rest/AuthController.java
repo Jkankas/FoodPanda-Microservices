@@ -43,9 +43,9 @@ public class AuthController {
                        (request.getPassword())));
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        return ResponseEntity.ok(Map.of("token",jwtUtility.generateToken(userDetails.getUsername()),
-                "authorities",userDetails.getAuthorities().toString()
-                ));
+            return ResponseEntity.ok(Map.of("token",jwtUtility.generateToken(userDetails.getUsername()),
+                    "authorities",userDetails.getAuthorities().toString()
+                    ));
     }
 
 }
