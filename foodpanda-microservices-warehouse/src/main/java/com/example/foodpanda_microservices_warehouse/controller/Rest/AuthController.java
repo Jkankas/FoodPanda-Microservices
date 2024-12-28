@@ -1,6 +1,9 @@
 package com.example.foodpanda_microservices_warehouse.controller.Rest;
 
 import com.example.foodpanda_microservices_warehouse.dto.request.JwtLoginRequest;
+import com.example.foodpanda_microservices_warehouse.dto.response.ApiResponse;
+import com.example.foodpanda_microservices_warehouse.security.UserDetailsImplementation;
+import com.example.foodpanda_microservices_warehouse.service.AuthService;
 import com.example.foodpanda_microservices_warehouse.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,48 +29,12 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    JwtUtil jwtUtil;
-
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
+    AuthService authService;
 
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String,Object>> login(@RequestBody JwtLoginRequest request) {
-        try {
-            // Authenticate user
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
-                            request.getPassword()
-                    )
-            );
-
-            // Retrieve authenticated user details
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-
-            // Generate token
-            String token = jwtUtil.generateToken(userDetails.getUsername());
-            System.out.println(token);
-
-            // Build response
-            Map<String, Object> response = Map.of(
-                    "token", token,
-                    "department", userDetails.getAuthorities()
-            );
-
-            return ResponseEntity.ok(response);
-
-        } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Invalid username or password"));
-        }
+    public ApiResponse login(@RequestBody JwtLoginRequest request) {
+        return authService.login(request);
     }
 
 }

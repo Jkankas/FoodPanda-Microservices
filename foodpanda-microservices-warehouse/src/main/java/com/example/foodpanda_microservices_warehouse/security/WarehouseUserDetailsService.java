@@ -2,6 +2,8 @@ package com.example.foodpanda_microservices_warehouse.security;
 
 import com.example.foodpanda_microservices_warehouse.entity.WarehouseUsers;
 import com.example.foodpanda_microservices_warehouse.repository.UserProfileReadRepository;
+import com.example.foodpanda_microservices_warehouse.repository.UserProfileRepository;
+import com.example.foodpanda_microservices_warehouse.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,26 +13,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Optional;
+
 @Component
 public class WarehouseUserDetailsService implements UserDetailsService {
 
+
     @Autowired
-    UserProfileReadRepository repository;
+    UserProfileRepository repository;
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        WarehouseUsers users = repository.findUserByEmail(email);
-        if(ObjectUtils.isEmpty(users)){
-            throw new UsernameNotFoundException("user not found"+email);
-        }
-
-       UserDetailsImplementation implementation =  UserDetailsImplementation.create(users);
-//      String pass1 =;
-//       String pass2 =  users.getPassword();
-//       if(passwordEncoder.matches(pass1,pass2)){
-//           return implementation;
-//       }
-        return implementation;
+        WarehouseUsers users1 = null;
+        Optional<WarehouseUsers> users = repository.findByActiveEmail(email);
+        WarehouseUsers user = users.orElseThrow(() ->
+                new UsernameNotFoundException("User not found with email: " + email)
+        );
+        return UserDetailsImplementation.create(user);
     }
 }

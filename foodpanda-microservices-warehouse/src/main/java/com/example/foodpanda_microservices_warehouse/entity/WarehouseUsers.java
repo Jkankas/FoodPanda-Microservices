@@ -1,5 +1,6 @@
 package com.example.foodpanda_microservices_warehouse.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,10 +21,11 @@ public class WarehouseUsers {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String username;
     private String password;
     private String email;
     private String department;
+    @JsonProperty("is_active")
+    private boolean is_Active;
 
 }
