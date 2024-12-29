@@ -40,4 +40,14 @@ public class ApiResponse {
     }
 
 
+
+    public static ApiResponse prepareFailureApiResponse (Object result){
+        ApiResponse response = new ApiResponse();
+        response.setResult(result);
+        response.setMessage("Failure");
+        response.setStatus(400);
+        return response;
+    }
+
+
 }

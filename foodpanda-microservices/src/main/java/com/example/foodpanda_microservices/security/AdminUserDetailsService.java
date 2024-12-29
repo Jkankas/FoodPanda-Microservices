@@ -1,6 +1,6 @@
-package com.example.foodpanda_microservices.service;
+package com.example.foodpanda_microservices.security;
+import com.example.foodpanda_microservices.dto.pojo.UserEntity;
 import com.example.foodpanda_microservices.repository.MenuRepository;
-import io.jsonwebtoken.security.Password;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,12 +11,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
-public class CustomUserDetailsService implements UserDetailsService {
+public class AdminUserDetailsService implements UserDetailsService {
 
     @Autowired
     MenuRepository menuRepository;
@@ -25,17 +25,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<Map<String,Object>> list = menuRepository.userProfile();
-        for(Map<String,Object> map : list){
-            if(map.get("username").equals(username)){
-                List<GrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority((String)map.get("role")));
-                System.out.println(authorities);
-                return new User(username,(String)map.get("password"), authorities);
+        Map<String,Object> map = menuRepository.userProfile(username);
+        UserEntity entity = new UserEntity();
 
-            }
-        }
-        return null;
+        entity.setUserName((String)map.get("username"));
+        entity.setEmail((String)map.get("email"));
+        entity.setDepartment((String)map.get("department"));
+        entity.setPassword((String)map.get("password"));
+
+        return AdminUserDetailsImplementation.create(entity);
     }
+
+
 
 }
