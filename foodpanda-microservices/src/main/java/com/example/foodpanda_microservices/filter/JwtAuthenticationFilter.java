@@ -1,6 +1,6 @@
 package com.example.foodpanda_microservices.filter;
 
-import com.example.foodpanda_microservices.service.CustomUserDetailsService;
+import com.example.foodpanda_microservices.security.AdminUserDetailsService;
 import com.example.foodpanda_microservices.util.JwtUtility;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,7 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     JwtUtility jwtUtility;
 
     @Autowired
-    CustomUserDetailsService customUserDetailsService;
+    AdminUserDetailsService customUserDetailsService;
 
 
     @Override

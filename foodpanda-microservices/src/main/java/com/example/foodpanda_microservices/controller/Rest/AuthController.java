@@ -2,6 +2,8 @@ package com.example.foodpanda_microservices.controller.Rest;
 
 import com.example.foodpanda_microservices.dto.request.LoginRequest;
 import com.example.foodpanda_microservices.dto.response.ApiResponse;
+import com.example.foodpanda_microservices.security.AdminUserDetailsImplementation;
+import com.example.foodpanda_microservices.service.AuthService;
 import com.example.foodpanda_microservices.util.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,25 +29,17 @@ public class AuthController {
 
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    JwtUtility jwtUtility;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
+    AuthService service;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String,String>> login( @RequestBody LoginRequest request){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(),
-                       (request.getPassword())));
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-            return ResponseEntity.ok(Map.of("token",jwtUtility.generateToken(userDetails.getUsername()),
-                    "authorities",userDetails.getAuthorities().toString()
-                    ));
+    public ApiResponse login( @RequestBody LoginRequest request){
+        return service.login(request);
     }
 
+
 }
+
+
+//            return ResponseEntity.ok(Map.of("token",jwtUtility.generateToken(userDetailsImplementation.getEmail()),
+//                    "authorities",userDetailsImplementation.getAuthorities().toString()
+//                    ));

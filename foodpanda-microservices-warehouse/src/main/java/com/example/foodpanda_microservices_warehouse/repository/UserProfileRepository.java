@@ -14,5 +14,4 @@ public interface UserProfileRepository extends JpaRepository<WarehouseUsers,Long
     @Query("select c from WarehouseUsers c where c.email = ?1 and c.is_Active = true")
      Optional<WarehouseUsers> findByActiveEmail(String email);
 
-
 }

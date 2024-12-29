@@ -28,8 +28,8 @@ public class MenuRepositoryImplementation implements MenuRepository {
     }
 
 
-    public List<Map<String,Object>> userProfile(){
-        return template.queryForList(MenuRepository.FETCH_USER_DETAILS);
+    public  Map<String, Object> userProfile(String email){
+        return template.queryForMap(MenuRepository.FETCH_USER_DETAILS,email);
     }
 
 
