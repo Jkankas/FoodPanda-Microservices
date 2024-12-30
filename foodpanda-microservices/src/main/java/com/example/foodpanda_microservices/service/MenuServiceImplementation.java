@@ -7,7 +7,6 @@ import com.example.foodpanda_microservices.dto.response.FetchAllMenuResponse;
 import com.example.foodpanda_microservices.dto.response.MenuResponse;
 import com.example.foodpanda_microservices.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,12 +42,6 @@ public class MenuServiceImplementation implements MenuService{
         return menuResponse;
     }
 
-
-    public ApiResponse createUser(UserEntityRequest request){
-        repository.createProfile(request.getUsername(),request.getPassword(),request.getDepartment(),
-                request.getEmail());
-        return ApiResponse.prepareApiResponse("Successfully Added");
-    }
 
 
 }

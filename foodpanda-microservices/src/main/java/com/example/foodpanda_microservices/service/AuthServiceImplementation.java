@@ -35,8 +35,8 @@ public class AuthServiceImplementation implements AuthService {
         }
         if(userExists(loginRequest)){
             try{
-                UserDetails implementation = (AdminUserDetailsImplementation)userAuthentication(loginRequest).getPrincipal();
-                return ApiResponse.prepareApiResponse(jwtUtility.generateToken(implementation.getUsername()));
+                AdminUserDetailsImplementation implementation = (AdminUserDetailsImplementation)userAuthentication(loginRequest).getPrincipal();
+                return ApiResponse.prepareApiResponse(jwtUtility.generateToken(implementation.getEmail()));
             }catch (Exception e){
                 return ApiResponse.prepareFailureApiResponse(e.getMessage() + " "+ "Incorrect Password");
             }

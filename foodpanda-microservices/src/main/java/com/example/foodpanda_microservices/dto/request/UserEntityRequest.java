@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserEntityRequest {
 
-    String username;
-    String password;
-    String department;
-    String email;
+   private String username;
+   private String password;
+   private String department;
+   private String email;
+   private String role;
 
 }

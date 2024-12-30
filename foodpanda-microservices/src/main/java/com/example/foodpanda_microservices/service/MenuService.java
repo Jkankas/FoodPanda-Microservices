@@ -9,6 +9,5 @@ public interface MenuService {
 
     public int addMenu(MenuRequest request);
     public FetchAllMenuResponse fetchAllMenuList();
-    public ApiResponse createUser(UserEntityRequest request);
 
 }

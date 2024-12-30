@@ -1,12 +1,11 @@
 package com.example.foodpanda_microservices.security;
 
-import com.example.foodpanda_microservices.dto.pojo.UserEntity;
+import com.example.foodpanda_microservices.dto.entities.UserEntity;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;

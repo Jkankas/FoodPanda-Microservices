@@ -1,5 +1,8 @@
-package com.example.foodpanda_microservices.dto.pojo;
+package com.example.foodpanda_microservices.dto.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,13 +12,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "admin_profiles")
 public class UserEntity {
 
-    private String id;
-    private String userName;
+    @Id
+    private Long id;
+    private String username;
     private String password;
     private String department;
     private String email;
+    private String role;
 
 
 }
