@@ -33,10 +33,10 @@ public class MenuRepositoryImplementation implements MenuRepository {
     }
 
 
-    public void createProfile(String username, String password , String department ,String email){
+    public void createProfile(String department, String email , String password ,String username,String role){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encryptedPass = passwordEncoder.encode(password);
-        template.update(MenuRepository.CREATE_USER,username,encryptedPass,department,email);
+        template.update(MenuRepository.CREATE_USER,department,email,encryptedPass,username,role);
     }
 
 

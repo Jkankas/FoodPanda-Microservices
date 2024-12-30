@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/menu")
+@RequestMapping("/api/menu/")
 public class MenuController {
 
     @Autowired
@@ -39,18 +39,14 @@ public class MenuController {
 
     // Fetch Menu List
     @GetMapping("/fetchAll")
-    public ResponseEntity<ApiResponse> fetchAllMenuList(){
+    public ResponseEntity<ApiResponse> fetchAllMenuList() {
         FetchAllMenuResponse result = menuService.fetchAllMenuList();
-     ApiResponse response = ApiResponse.prepareApiResponse(result);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        ApiResponse response = ApiResponse.prepareApiResponse(result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
 
-    @PostMapping("/createUser")
-    public ResponseEntity<ApiResponse> createUser( @RequestBody UserEntityRequest request){
-        return new ResponseEntity<>(menuService.createUser(request),HttpStatus.OK);
-    }
 
 
 }
