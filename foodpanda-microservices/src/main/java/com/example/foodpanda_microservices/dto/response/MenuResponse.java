@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MenuResponse {
 
-    private Integer Id;
+    private Long Id;
     private String dish;
     private String category;
 }

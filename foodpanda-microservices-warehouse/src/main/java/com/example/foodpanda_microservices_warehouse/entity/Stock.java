@@ -17,6 +17,6 @@ import lombok.NoArgsConstructor;
 public class Stock {
     @Id
     private long id;
-    private String category;
+    private Double stock;
     private String dish;
 }

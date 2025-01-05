@@ -34,7 +34,7 @@ public class MenuServiceImplementation implements MenuService{
 
         for(Map<String,Object> map : list){
             MenuResponse response = new MenuResponse();
-            response.setId((Integer) map.get("dish_id"));
+            response.setId((Long) map.get("dish_id"));
             response.setDish((String)map.get("dish"));
             response.setCategory((String)map.get("category"));
             menuResponse.getMenuList().add(response);
