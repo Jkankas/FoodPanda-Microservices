@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5863a31e-1903-4028-9066-79e2bc38eeec" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/FoodpandaMicroservicesMangementApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/configuration/AppConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/configuration/ApplicationProperties.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/controller/Advice/ManagementControllerAdvice.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/controller/Rest/PriceController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/dto/entity/PriceEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/dto/request/PriceRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/dto/response/ApiResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/dto/response/MenuResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/dto/response/PriceResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/repository/PriceRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/repository/PriceRepositoryImplementation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/service/PriceService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/service/PriceServiceImplementation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/foodpanda_microservices_Mangement/FoodpandaMicroservicesMangementApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodpanda-microservices-warehouse/src/main/java/com/example/foodpanda_microservices_warehouse/entity/Stock.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodpanda-microservices-warehouse/src/main/java/com/example/foodpanda_microservices_warehouse/entity/Stock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodpanda-microservices-warehouse/src/main/java/com/example/foodpanda_microservices_warehouse/repository/StockRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodpanda-microservices-warehouse/src/main/java/com/example/foodpanda_microservices_warehouse/repository/StockRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodpanda-microservices-warehouse/src/main/java/com/example/foodpanda_microservices_warehouse/service/StockServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodpanda-microservices-warehouse/src/main/java/com/example/foodpanda_microservices_warehouse/service/StockServiceImplementation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/FoodpandaMicroservicesApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/FoodpandaMicroservicesApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/configuration/JwtConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/configuration/JwtConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/controller/Rest/MenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/controller/Rest/MenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/dto/response/MenuResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/dto/response/MenuResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/service/MenuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/service/MenuService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/service/MenuServiceImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodpanda-microservices/src/main/java/com/example/foodpanda_microservices/service/MenuServiceImplementation.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2pbaPBD1OhoYZvt2yRhB5tcmNZy" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Foodpanda-Management.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev1",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/jaspreet007/Documents/Java Projects/FoodPanda/foodpanda-microservices-Mangement"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.foodpanda_microservices_Mangement.controller.Advice" />
+      <recent name="com.example.foodpanda_microservices_Mangement.dto.request" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Foodpanda-Management" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.example.foodpanda_microservices_Mangement.FoodpandaMicroservicesMangementApplication" />
+      <module name="foodpanda-microservices-Mangement" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5863a31e-1903-4028-9066-79e2bc38eeec" name="Changes" comment="" />
+      <created>1733037201850</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733037201850</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/foodpanda_microservices_Mangement/service/PriceServiceImplementation.java</url>
+          <line>28</line>
+          <properties class="com.example.foodpanda_microservices_Mangement.service.PriceServiceImplementation" method="addPrice">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

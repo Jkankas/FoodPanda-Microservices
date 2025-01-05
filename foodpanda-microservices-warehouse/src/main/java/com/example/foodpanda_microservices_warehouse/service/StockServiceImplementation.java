@@ -33,18 +33,18 @@ public class StockServiceImplementation implements StockService {
 
     @Override
     public ResponseEntity<ApiResponse> addStock(StockRequest request) {
-        LoginRequestBody requestBody = new LoginRequestBody();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("application/json"));
-        HttpEntity<LoginRequestBody> httpEntity = new HttpEntity<>(requestBody, headers);
-        ResponseEntity<TokenResponse> token = restTemplate.exchange(properties.getToken(),
-                HttpMethod.POST, httpEntity, TokenResponse.class);
+//        LoginRequestBody requestBody = new LoginRequestBody();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.valueOf("application/json"));
+//        HttpEntity<LoginRequestBody> httpEntity = new HttpEntity<>(requestBody, headers);
+//        ResponseEntity<TokenResponse> token = restTemplate.exchange(properties.getToken(),
+//                HttpMethod.POST, httpEntity, TokenResponse.class);
 
-        HttpHeaders headers1 = new HttpHeaders();
-        headers1.set("Authorization", "Bearer " + token.getBody().getToken());
-        HttpEntity<?> httpEntity1 = new HttpEntity<>(headers1);
+//        HttpHeaders headers1 = new HttpHeaders();
+//        headers1.set("Authorization", "Bearer " + token.getBody().getToken());
+//        HttpEntity<?> httpEntity1 = new HttpEntity<>(headers1);
         ResponseEntity<MenuListResponse> menuList = restTemplate.exchange(properties.getDish_list(),
-                HttpMethod.GET, httpEntity1, MenuListResponse.class);
+                HttpMethod.GET, null, MenuListResponse.class);
 
 
         Map<String, Object> map = (Map<String, Object>) menuList.getBody().getResult();

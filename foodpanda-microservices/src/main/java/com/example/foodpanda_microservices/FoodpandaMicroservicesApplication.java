@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @SpringBootApplication
 public class FoodpandaMicroservicesApplication {

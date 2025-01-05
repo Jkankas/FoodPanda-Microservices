@@ -7,7 +7,7 @@ import com.example.foodpanda_microservices.dto.response.FetchAllMenuResponse;
 
 public interface MenuService {
 
-    public int addMenu(MenuRequest request);
-    public FetchAllMenuResponse fetchAllMenuList();
+     int addMenu(MenuRequest request);
+     FetchAllMenuResponse fetchAllMenuList();
 
 }
