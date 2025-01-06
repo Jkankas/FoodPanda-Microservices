@@ -1,5 +1,6 @@
-package com.example.foodpanda_microservices_warehouse.repository;
+package com.example.foodpanda_microservices_warehouse.repository.impl;
 
+import com.example.foodpanda_microservices_warehouse.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

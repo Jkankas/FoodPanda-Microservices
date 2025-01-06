@@ -1,14 +1,12 @@
-package com.example.foodpanda_microservices_warehouse.service;
+package com.example.foodpanda_microservices_warehouse.service.impl;
 
 import com.example.foodpanda_microservices_warehouse.configuration.ApplicationProperties;
-import com.example.foodpanda_microservices_warehouse.dto.request.LoginRequestBody;
 import com.example.foodpanda_microservices_warehouse.dto.request.StockRequest;
 import com.example.foodpanda_microservices_warehouse.dto.response.ApiResponse;
 import com.example.foodpanda_microservices_warehouse.dto.response.MenuListResponse;
 import com.example.foodpanda_microservices_warehouse.dto.response.StockResponse;
-import com.example.foodpanda_microservices_warehouse.dto.response.TokenResponse;
 import com.example.foodpanda_microservices_warehouse.repository.StockRepository;
-import jakarta.websocket.OnClose;
+import com.example.foodpanda_microservices_warehouse.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -43,6 +41,8 @@ public class StockServiceImplementation implements StockService {
 //        HttpHeaders headers1 = new HttpHeaders();
 //        headers1.set("Authorization", "Bearer " + token.getBody().getToken());
 //        HttpEntity<?> httpEntity1 = new HttpEntity<>(headers1);
+
+
         ResponseEntity<MenuListResponse> menuList = restTemplate.exchange(properties.getDish_list(),
                 HttpMethod.GET, null, MenuListResponse.class);
 

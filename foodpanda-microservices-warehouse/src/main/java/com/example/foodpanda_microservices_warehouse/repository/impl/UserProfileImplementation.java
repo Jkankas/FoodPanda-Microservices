@@ -1,13 +1,9 @@
-package com.example.foodpanda_microservices_warehouse.repository;
+package com.example.foodpanda_microservices_warehouse.repository.impl;
 
-import com.example.foodpanda_microservices_warehouse.entity.WarehouseUsers;
+import com.example.foodpanda_microservices_warehouse.repository.UserProfileReadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.ObjectUtils;
 
 import java.util.Map;
 

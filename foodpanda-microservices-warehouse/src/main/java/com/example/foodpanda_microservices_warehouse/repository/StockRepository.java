@@ -6,7 +6,7 @@ import java.util.Map;
 public interface StockRepository {
 
     String ADD_STOCK = "insert into warehouse_stock (stock,dish) values (?,?)";
-    String FETCH_STOCK = "select * from menu_stock";
+    String FETCH_STOCK = "select * from warehouse_stock";
 
 
     public void addStock(int stock,String dish);

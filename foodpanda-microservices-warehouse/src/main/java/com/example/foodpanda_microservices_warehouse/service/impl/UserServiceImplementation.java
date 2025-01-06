@@ -1,19 +1,19 @@
-package com.example.foodpanda_microservices_warehouse.service;
+package com.example.foodpanda_microservices_warehouse.service.impl;
 
 import com.example.foodpanda_microservices_warehouse.entity.WarehouseUsers;
-import com.example.foodpanda_microservices_warehouse.repository.UserProfileRepository;
-import jakarta.persistence.Entity;
+import com.example.foodpanda_microservices_warehouse.repository.UserProfileJpaRepository;
+import com.example.foodpanda_microservices_warehouse.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImplementation implements UserService{
+public class UserServiceImplementation implements UserService {
 
 
     @Autowired
-    private UserProfileRepository repository;
+    private UserProfileJpaRepository repository;
 
         public WarehouseUsers addProfile(WarehouseUsers users){
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

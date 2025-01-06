@@ -1,9 +1,10 @@
-package com.example.foodpanda_microservices_warehouse.service;
+package com.example.foodpanda_microservices_warehouse.service.impl;
 import com.example.foodpanda_microservices_warehouse.dto.request.JwtLoginRequest;
 import com.example.foodpanda_microservices_warehouse.dto.response.ApiResponse;
 import com.example.foodpanda_microservices_warehouse.entity.WarehouseUsers;
-import com.example.foodpanda_microservices_warehouse.repository.UserProfileRepository;
+import com.example.foodpanda_microservices_warehouse.repository.UserProfileJpaRepository;
 import com.example.foodpanda_microservices_warehouse.security.UserDetailsImplementation;
+import com.example.foodpanda_microservices_warehouse.service.AuthService;
 import com.example.foodpanda_microservices_warehouse.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,11 +16,11 @@ import java.util.Optional;
 
 
 @Service
-public class AuthServiceImplementation implements AuthService{
+public class AuthServiceImplementation implements AuthService {
 
 
     @Autowired
-    UserProfileRepository userProfileRepository;
+    UserProfileJpaRepository userProfileRepository;
 
     @Autowired
     JwtUtil util;
