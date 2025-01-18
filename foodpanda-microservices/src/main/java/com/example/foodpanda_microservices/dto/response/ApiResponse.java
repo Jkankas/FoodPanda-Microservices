@@ -40,6 +40,13 @@ public class ApiResponse {
     }
 
 
+    public static ApiResponse customExceptionResponse(Object result, Integer status){
+        ApiResponse response = new ApiResponse();
+        response.setResult(result);
+        response.setStatus(status);
+        return response;
+    }
+
 
     public static ApiResponse prepareFailureApiResponse (Object result){
         ApiResponse response = new ApiResponse();
