@@ -44,7 +44,13 @@ public class MenuController {
         FetchAllMenuResponse result = menuService.fetchAllMenuList();
         ApiResponse response = ApiResponse.prepareApiResponse(result);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
+
+
+    @GetMapping("/fetchCompleteDetails")
+    public ApiResponse fetchCompleteMenu( String dish){
+        return null;
     }
 
 

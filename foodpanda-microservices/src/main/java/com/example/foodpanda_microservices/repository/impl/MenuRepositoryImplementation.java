@@ -1,5 +1,6 @@
-package com.example.foodpanda_microservices.repository;
+package com.example.foodpanda_microservices.repository.impl;
 
+import com.example.foodpanda_microservices.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,6 +39,8 @@ public class MenuRepositoryImplementation implements MenuRepository {
         String encryptedPass = passwordEncoder.encode(password);
         template.update(MenuRepository.CREATE_USER,department,email,encryptedPass,username,role);
     }
+
+
 
 
 
