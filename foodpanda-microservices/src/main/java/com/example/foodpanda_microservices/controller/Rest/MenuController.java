@@ -36,8 +36,6 @@ public class MenuController {
 
 
 
-
-
     // Fetch Menu List
     @GetMapping("/fetchAll")
     public ResponseEntity<ApiResponse> fetchAllMenuList() {
@@ -48,11 +46,11 @@ public class MenuController {
 
 
 
-    @GetMapping("/fetchCompleteDetails")
-    public ApiResponse fetchCompleteMenu( String dish){
-        return null;
-    }
 
+    @GetMapping("/fetchCompleteDetails/{dish}")
+    public ApiResponse fetchCompleteMenu(@PathVariable String dish){
+      return menuService.fetchCompleteDishDetails(dish);
+    }
 
 
 

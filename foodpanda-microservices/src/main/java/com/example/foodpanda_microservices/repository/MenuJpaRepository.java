@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface MenuJpaRepository extends JpaRepository<Menu,Long> {
 
-    @Query(value = "select * from Menu where dish = ?1",nativeQuery = true)
+    @Query(value = "select * from menu_list where dish = ?1",nativeQuery = true)
     Optional<Menu> findMenuDetails(String dish);
 
 

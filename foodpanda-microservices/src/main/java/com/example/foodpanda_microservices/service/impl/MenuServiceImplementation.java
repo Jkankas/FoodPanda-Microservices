@@ -3,10 +3,7 @@ package com.example.foodpanda_microservices.service.impl;
 import com.example.foodpanda_microservices.dto.entities.Menu;
 import com.example.foodpanda_microservices.dto.request.CompleteDetailsRequestDTO;
 import com.example.foodpanda_microservices.dto.request.MenuRequest;
-import com.example.foodpanda_microservices.dto.response.ApiResponse;
-import com.example.foodpanda_microservices.dto.response.CompleteMenuDetailsResponseDTO;
-import com.example.foodpanda_microservices.dto.response.FetchAllMenuResponse;
-import com.example.foodpanda_microservices.dto.response.MenuResponse;
+import com.example.foodpanda_microservices.dto.response.*;
 import com.example.foodpanda_microservices.repository.MenuJpaRepository;
 import com.example.foodpanda_microservices.repository.MenuRepository;
 import com.example.foodpanda_microservices.service.MenuService;
@@ -14,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -56,9 +51,9 @@ public class MenuServiceImplementation implements MenuService {
 
 
 
-   public Optional<Menu> fetchMenuDetails(CompleteDetailsRequestDTO requestDTO){
+   public Optional<Menu> fetchMenuDetails(String dish){
         CompleteMenuDetailsResponseDTO responseDTO = new CompleteMenuDetailsResponseDTO();
-       Optional<Menu> menuList = menuJpaRepository.findMenuDetails(requestDTO.getDish());
+       Optional<Menu> menuList = menuJpaRepository.findMenuDetails(dish);
        if(menuList.isPresent()){
            Menu menu = menuList.get();
            responseDTO.setDish_id(menu.getDishId());
@@ -66,16 +61,52 @@ public class MenuServiceImplementation implements MenuService {
            responseDTO.setDish(menu.getDish());
        }
        else{
+           System.out.println(menuList);
            return Optional.empty();
+
        }
         return menuList;
     }
 
 
-    public ApiResponse fetchCompleteDishDetails(CompleteDetailsRequestDTO requestDTO){
 
-            return null;
+    public ApiResponse fetchCompleteDishDetails(String dish){
+
+        Optional<Menu> menu =  fetchMenuDetails(dish);
+        if(menu.isEmpty()){
+            return ApiResponse.prepareFailureApiResponse("Dish not Available!");
+        }
+
+        Integer stockValue = 0;
+        Double price = 0.0;
+        String stockUri = "http://localhost:8081/api/warehouse/fetchStockByDish/{dish}";
+        StockResponse response = new StockResponse();
+       response= restTemplate.getForObject(stockUri,StockResponse.class,dish);
+       Map<String,Object> stockMap = new HashMap<>();
+       stockMap = (Map<String,Object>) response.getResult();
+        String dishName = (String)stockMap.get("dish");
+       if(dishName.equalsIgnoreCase(dish)){
+          stockValue = (Integer) stockMap.get("stock");
+       }
+
+
+       String priceUri = "http://localhost:8081/api/warehouse/getPriceByDish/{dish}";
+       PriceResponse response1 = new PriceResponse();
+       response1 = restTemplate.getForObject(priceUri,PriceResponse.class,dish);
+        Map<String,Object> priceMap = new HashMap<>();
+        priceMap = (Map<String,Object>) response1.getResult();
+        String result1 = (String)priceMap.get("dish");
+        if(result1.equalsIgnoreCase(dish)){
+             price = (Double) priceMap.get("price");
+        }
+
+
+   CompleteMenuDetailsResponseDTO responseDTO1=  CompleteMenuDetailsResponseDTO.builder().dish_id(menu.get().getDishId()).dish(menu.get().getDish()).
+           Category(menu.get().getCategory()).stock(stockValue).price(price)
+                .build();
+
+        return ApiResponse.prepareApiResponse(responseDTO1);
+
     }
-
 
 }

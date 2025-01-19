@@ -9,5 +9,6 @@ public interface MenuService {
 
      int addMenu(MenuRequest request);
      FetchAllMenuResponse fetchAllMenuList();
+     public ApiResponse fetchCompleteDishDetails(String dish);
 
 }
