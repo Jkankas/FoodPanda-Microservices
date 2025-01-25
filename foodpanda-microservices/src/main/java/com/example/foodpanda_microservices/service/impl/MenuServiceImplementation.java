@@ -81,7 +81,13 @@ public class MenuServiceImplementation implements MenuService {
         Double price = 0.0;
         String stockUri = "http://localhost:8081/api/warehouse/fetchStockByDish/{dish}";
         StockResponse response = new StockResponse();
-       response= restTemplate.getForObject(stockUri,StockResponse.class,dish);
+        try{
+            response= restTemplate.getForObject(stockUri,StockResponse.class,dish);
+        }
+       catch (Exception ex){
+           return ApiResponse.prepareFailureApiResponse("Error Getting stock value from Middleware API");
+       }
+
        Map<String,Object> stockMap = new HashMap<>();
        stockMap = (Map<String,Object>) response.getResult();
         String dishName = (String)stockMap.get("dish");
@@ -89,10 +95,16 @@ public class MenuServiceImplementation implements MenuService {
           stockValue = (Integer) stockMap.get("stock");
        }
 
+        PriceResponse response1 = new PriceResponse();
+      String priceUri = "http://localhost:8081/api/warehouse/getPriceByDish/{dish}";
+       try{
+           response1 = restTemplate.getForObject(priceUri,PriceResponse.class,dish);
 
-       String priceUri = "http://localhost:8081/api/warehouse/getPriceByDish/{dish}";
-       PriceResponse response1 = new PriceResponse();
-       response1 = restTemplate.getForObject(priceUri,PriceResponse.class,dish);
+       }catch (Exception ex){
+               return ApiResponse.prepareFailureApiResponse("Error getting Price Value From Middleware API");
+
+       }
+
         Map<String,Object> priceMap = new HashMap<>();
         priceMap = (Map<String,Object>) response1.getResult();
         String result1 = (String)priceMap.get("dish");

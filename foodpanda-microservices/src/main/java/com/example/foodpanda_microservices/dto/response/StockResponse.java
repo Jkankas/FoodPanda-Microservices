@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class StockResponse {
     private Object result;
+    private Integer status;
 }

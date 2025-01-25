@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PriceResponse {
     private Object result;
+    private Integer status;
 }
