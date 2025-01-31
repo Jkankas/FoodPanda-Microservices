@@ -7,21 +7,15 @@ import com.example.foodpanda_microservices.helperClasses.IdGenerator;
 import com.example.foodpanda_microservices.helperClasses.PinCodeMaster;
 import com.example.foodpanda_microservices.repository.AdminJpaRepository;
 import com.example.foodpanda_microservices.repository.MenuRepository;
-import com.example.foodpanda_microservices.repository.UserProfileJpaRepository;
 import com.example.foodpanda_microservices.service.AdminService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Service
 public class AdminServiceImplementation implements AdminService {
@@ -64,6 +58,7 @@ public class AdminServiceImplementation implements AdminService {
 
 
    public Map<String,String> fetchStateCityByPin(int pin){
+        log.info("Pincode,{}",pin);
         Map<Integer,String> cityMap = PinCodeMaster.CityMaster();
         Map<Integer,String> stateMap = PinCodeMaster.stateMaster();
         if(!cityMap.containsKey(pin) || !stateMap.containsKey(pin)){
@@ -73,6 +68,7 @@ public class AdminServiceImplementation implements AdminService {
        Map<String,String> cityStateData = new HashMap<>();
        cityStateData.put("City",cityMap.get(pin));
        cityStateData.put("State",stateMap.get(pin));
+       log.info("response for state and city,{}",cityStateData);
        return cityStateData;
 
     }
@@ -89,11 +85,13 @@ public class AdminServiceImplementation implements AdminService {
 
          StringBuffer uniqueId = new StringBuffer();
          uniqueId.append(adminPrefix).append(stateCode).append(randomId);
+         log.info("uniqueId,{}",uniqueId);
          return uniqueId;
     }
 
 
     public Optional<AdminEntity> fetchAdminById(String uniqueId){
+        log.info("request received to fetch Admin by Id,{}",uniqueId);
         AdminEntity adminEntity;
         Optional<AdminEntity> entity = jpaRepository.findById(uniqueId);
         if(entity.isPresent()){
