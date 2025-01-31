@@ -3,6 +3,7 @@ package com.example.foodpanda_microservices_warehouse.controller.Rest;
 import com.example.foodpanda_microservices_warehouse.dto.response.ApiResponse;
 import com.example.foodpanda_microservices_warehouse.entity.WarehouseUsers;
 import com.example.foodpanda_microservices_warehouse.service.UserService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,13 @@ public class ProfileController {
     @Autowired
     UserService service;
 
+    @Autowired
+    private Logger log;
+
 
     @PostMapping("/addProfile")
     public ResponseEntity<ApiResponse> saveProfile( @RequestBody WarehouseUsers users){
+        log.info("request received at addProfile Controller,{}",users);
         WarehouseUsers users1 = service.addProfile(users);
         return new ResponseEntity<>(ApiResponse.prepareApiResponse("Profile added"),
                 HttpStatus.OK);

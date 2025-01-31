@@ -22,13 +22,12 @@ public class PriceRepositoryImplementation implements PriceRepository {
         template.update(PriceRepository.ADD_PRICE,dish,price);
     }
 
-
-
     public List<Map<String,Object>> fetchPrice(){
         return template.queryForList(PriceRepository.FETCH_PRICE);
     }
 
-
-
+    public Map<String,Object> fetchPriceByDish(String dish){
+        return template.queryForMap(PriceRepository.FETCH_PRICE_BY_DISH,dish);
+    }
 
 }

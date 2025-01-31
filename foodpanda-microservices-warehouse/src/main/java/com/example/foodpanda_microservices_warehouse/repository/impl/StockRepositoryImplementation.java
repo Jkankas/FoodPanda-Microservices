@@ -24,5 +24,9 @@ public class StockRepositoryImplementation implements StockRepository {
         return jdbc.queryForList(StockRepository.FETCH_STOCK);
     }
 
+    public Map<String,Object> fetchStockByDish(String dish){
+        return jdbc.queryForMap(FETCH_STOCK_BY_DISH,dish);
+    }
+
 
 }

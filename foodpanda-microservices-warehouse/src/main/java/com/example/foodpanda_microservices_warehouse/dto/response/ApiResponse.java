@@ -24,9 +24,9 @@ import java.time.Instant;
 
         public static ApiResponse prepareApiResponse (Object result){
             ApiResponse response = new ApiResponse();
-            response.setResult(result);
             response.setMessage("Success");
             response.setStatus(200);
+            response.setResult(result);
             return response;
         }
 
@@ -48,6 +48,16 @@ import java.time.Instant;
             response.setStatus(status);
             return response;
         }
+
+
+
+        public static ApiResponse customExceptionResponse(Object result, Integer status){
+            ApiResponse response = new ApiResponse();
+            response.setResult(result);
+            response.setStatus(status);
+            return response;
+        }
+
 
 
 

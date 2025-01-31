@@ -7,5 +7,5 @@ public interface PriceService {
 
      ApiResponse fetchPrice();
      ApiResponse addPrice(AddPriceRequest request);
-
+     ApiResponse fetchPriceByDish(String dish);
 }
