@@ -1,6 +1,6 @@
 package com.example.foodpanda_microservices.security;
 
-import com.example.foodpanda_microservices.dto.entities.UserEntity;
+import com.example.foodpanda_microservices.dto.entities.AdminEntity;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,7 +30,7 @@ public class AdminUserDetailsImplementation implements UserDetails {
 
 
 
-    public static AdminUserDetailsImplementation create(UserEntity entity){
+    public static AdminUserDetailsImplementation create(AdminEntity entity){
         List<GrantedAuthority> authorityList = new ArrayList<>();
         authorityList.add(new SimpleGrantedAuthority(entity.getDepartment()));
 

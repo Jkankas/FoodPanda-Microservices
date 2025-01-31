@@ -1,5 +1,5 @@
 package com.example.foodpanda_microservices.security;
-import com.example.foodpanda_microservices.dto.entities.UserEntity;
+import com.example.foodpanda_microservices.dto.entities.AdminEntity;
 import com.example.foodpanda_microservices.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +20,9 @@ public class AdminUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Map<String,Object> map = menuRepository.userProfile(username);
-        UserEntity entity = new UserEntity();
+        AdminEntity entity = new AdminEntity();
 
-        entity.setUsername((String)map.get("username"));
+        entity.setFullName(((String)map.get("username")));
         entity.setEmail((String)map.get("email"));
         entity.setDepartment((String)map.get("department"));
         entity.setPassword((String)map.get("password"));
