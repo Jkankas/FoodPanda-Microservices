@@ -12,9 +12,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.List;
 import java.util.Map;
+
+
+
 
 @Service
 public class StockServiceImplementation implements StockService {
@@ -76,7 +78,14 @@ public class StockServiceImplementation implements StockService {
         StockResponse response = new StockResponse();
         List<Map<String,Object>> list = repository.fetchStock();
         response.setFetchStock(list);
-
         return ApiResponse.prepareApiResponse(response.getFetchStock());
+    }
+
+
+
+
+    public ApiResponse fetchStockByDish(String dish){
+        Map<String,Object> map = repository.fetchStockByDish(dish);
+        return ApiResponse.prepareApiResponse(map);
     }
 }

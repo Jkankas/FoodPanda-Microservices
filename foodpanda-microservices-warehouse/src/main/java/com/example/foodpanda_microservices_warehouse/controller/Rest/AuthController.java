@@ -5,6 +5,7 @@ import com.example.foodpanda_microservices_warehouse.dto.response.ApiResponse;
 import com.example.foodpanda_microservices_warehouse.security.UserDetailsImplementation;
 import com.example.foodpanda_microservices_warehouse.service.AuthService;
 import com.example.foodpanda_microservices_warehouse.utility.JwtUtil;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +32,12 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
+    @Autowired
+    private Logger log;
 
     @PostMapping("/login")
     public ApiResponse login(@RequestBody JwtLoginRequest request) {
+        log.info("response received at warehouse-Login Controller,{}",request);
         return authService.login(request);
     }
 

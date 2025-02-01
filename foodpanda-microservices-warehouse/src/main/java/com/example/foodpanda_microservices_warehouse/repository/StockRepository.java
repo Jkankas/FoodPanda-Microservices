@@ -7,9 +7,12 @@ public interface StockRepository {
 
     String ADD_STOCK = "insert into warehouse_stock (stock,dish) values (?,?)";
     String FETCH_STOCK = "select * from warehouse_stock";
+    String FETCH_STOCK_BY_DISH = "select dish,stock from warehouse_stock where dish =?";
 
 
-    public void addStock(int stock,String dish);
-    public List<Map<String,Object>> fetchStock();
+     void addStock(int stock,String dish);
+    List<Map<String,Object>> fetchStock();
+    Map<String,Object> fetchStockByDish(String dish);
+
 
 }

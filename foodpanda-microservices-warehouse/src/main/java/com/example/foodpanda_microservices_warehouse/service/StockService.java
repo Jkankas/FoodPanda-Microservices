@@ -9,4 +9,5 @@ public interface StockService {
 
     public ResponseEntity<ApiResponse> addStock(StockRequest request);
     public ApiResponse fetchStock();
+    public ApiResponse fetchStockByDish(String dish);
 }
