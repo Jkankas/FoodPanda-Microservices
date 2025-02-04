@@ -32,16 +32,5 @@ public class MenuRepositoryImplementation implements MenuRepository {
     }
 
 
-    public  Map<String, Object> userProfile(String email){
-        return template.queryForMap(MenuRepository.FETCH_USER_DETAILS,email);
-    }
-
-
-
-    public void createProfile(String department, String password, String role, String fullName, String email, int pin, String address1, String address2, LocalDateTime date, boolean is_active,String city,String state,String adminId) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encryptedPass = passwordEncoder.encode(password);
-        template.update(MenuRepository.CREATE_USER,department,encryptedPass,role,fullName,email,pin,address1,address2,date,is_active,city,state,adminId);
-    }
 
 }
