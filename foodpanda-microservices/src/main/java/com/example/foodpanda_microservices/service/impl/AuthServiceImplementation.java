@@ -2,6 +2,7 @@ package com.example.foodpanda_microservices.service.impl;
 
 import com.example.foodpanda_microservices.dto.request.LoginRequest;
 import com.example.foodpanda_microservices.dto.response.ApiResponse;
+import com.example.foodpanda_microservices.repository.AdminRepository;
 import com.example.foodpanda_microservices.repository.MenuRepository;
 import com.example.foodpanda_microservices.security.AdminUserDetailsImplementation;
 import com.example.foodpanda_microservices.service.AuthService;
@@ -27,7 +28,7 @@ public class AuthServiceImplementation implements AuthService {
     JwtUtility jwtUtility;
 
     @Autowired
-    MenuRepository repository;
+    AdminRepository repository;
 
     public ApiResponse login(LoginRequest loginRequest){
         if(ObjectUtils.isEmpty(loginRequest.getUsername())|| ObjectUtils.isEmpty(loginRequest.getPassword())){

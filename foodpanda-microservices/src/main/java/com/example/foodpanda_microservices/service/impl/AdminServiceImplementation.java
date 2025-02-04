@@ -6,6 +6,7 @@ import com.example.foodpanda_microservices.dto.response.ApiResponse;
 import com.example.foodpanda_microservices.helperClasses.IdGenerator;
 import com.example.foodpanda_microservices.helperClasses.PinCodeMaster;
 import com.example.foodpanda_microservices.repository.AdminJpaRepository;
+import com.example.foodpanda_microservices.repository.AdminRepository;
 import com.example.foodpanda_microservices.repository.MenuRepository;
 import com.example.foodpanda_microservices.service.AdminService;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ public class AdminServiceImplementation implements AdminService {
     private Logger log;
 
     @Autowired
-   private MenuRepository repository;
+   private AdminRepository repository;
 
     @Autowired
     AdminJpaRepository jpaRepository;

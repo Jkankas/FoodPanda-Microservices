@@ -1,5 +1,6 @@
 package com.example.foodpanda_microservices.security;
 import com.example.foodpanda_microservices.dto.entities.AdminEntity;
+import com.example.foodpanda_microservices.repository.AdminRepository;
 import com.example.foodpanda_microservices.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,13 +14,13 @@ import java.util.Map;
 public class AdminUserDetailsService implements UserDetailsService {
 
     @Autowired
-    MenuRepository menuRepository;
+    AdminRepository adminRepository;
 
 
 
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Map<String,Object> map = menuRepository.userProfile(username);
+        Map<String,Object> map = adminRepository.userProfile(username);
         AdminEntity entity = new AdminEntity();
 
         entity.setFullName(((String)map.get("username")));
