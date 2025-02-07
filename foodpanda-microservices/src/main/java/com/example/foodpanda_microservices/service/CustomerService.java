@@ -1,9 +1,7 @@
 package com.example.foodpanda_microservices.service;
 
-import com.example.foodpanda_microservices.dto.request.CustomerEntityRequest;
-import com.example.foodpanda_microservices.dto.request.CustomerGenerateOtpRequest;
-import com.example.foodpanda_microservices.dto.request.CustomerValidateOtpRequest;
-import com.example.foodpanda_microservices.dto.request.UpdateProfileRequest;
+import com.example.foodpanda_microservices.dto.entities.CustomerOrder;
+import com.example.foodpanda_microservices.dto.request.*;
 import com.example.foodpanda_microservices.dto.response.ApiResponse;
 import com.example.foodpanda_microservices.dto.response.CustomerGenerateOtpResponse;
 
@@ -14,6 +12,7 @@ public interface CustomerService {
     ApiResponse getCustomerProfile();
     ApiResponse saveProfile(CustomerEntityRequest request);
     ApiResponse updateProfile(UpdateProfileRequest request);
+    ApiResponse customerOrder(CustomerOrderRequest order);
 //     ApiResponse deleteMetadata(String phone);
 
 }

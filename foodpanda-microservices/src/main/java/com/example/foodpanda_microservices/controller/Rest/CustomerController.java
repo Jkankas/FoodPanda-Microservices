@@ -2,6 +2,7 @@ package com.example.foodpanda_microservices.controller.Rest;
 
 import com.example.foodpanda_microservices.dto.request.CustomerEntityRequest;
 import com.example.foodpanda_microservices.dto.request.CustomerGenerateOtpRequest;
+import com.example.foodpanda_microservices.dto.request.CustomerOrderRequest;
 import com.example.foodpanda_microservices.dto.request.UpdateProfileRequest;
 import com.example.foodpanda_microservices.dto.response.ApiResponse;
 import com.example.foodpanda_microservices.dto.response.CustomerGenerateOtpResponse;
@@ -35,7 +36,7 @@ public class CustomerController {
 
 
 
-    @GetMapping("/profile")
+    @GetMapping("/get/profile")
     public ApiResponse customerProfile(){
         return customerService.getCustomerProfile();
     }
@@ -53,6 +54,15 @@ public class CustomerController {
     public ApiResponse updateProfile(@RequestBody UpdateProfileRequest request){
         return customerService.updateProfile(request);
     }
+
+
+    // Order a Dish
+    @PostMapping("/customer-order")
+    public ApiResponse customerOrder( @RequestBody CustomerOrderRequest request){
+       return customerService.customerOrder(request);
+    }
+
+
 
 
 
