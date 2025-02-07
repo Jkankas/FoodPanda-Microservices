@@ -88,4 +88,28 @@ public class StockServiceImplementation implements StockService {
         Map<String,Object> map = repository.fetchStockByDish(dish);
         return ApiResponse.prepareApiResponse(map);
     }
+
+
+    public ApiResponse updateStock(String dish){
+
+        try{
+            Map<String,Object> originalStockMap = repository.fetchStockByDish(dish);
+        }catch (Exception ex){
+           throw ex;
+        }
+
+
+
+
+
+       int updatedStock = repository.updateStock(dish);
+       if(updatedStock==0){
+           throw new IllegalStateException("Error while Updating Stocks!");
+       }
+
+
+
+
+       return ApiResponse.prepareApiResponse("Succesfully updated");
+    }
 }
