@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 public interface StockService {
 
 
-    public ResponseEntity<ApiResponse> addStock(StockRequest request);
-    public ApiResponse fetchStock();
-    public ApiResponse fetchStockByDish(String dish);
+    ResponseEntity<ApiResponse> addStock(StockRequest request);
+    ApiResponse fetchStock();
+    ApiResponse fetchStockByDish(String dish);
+
+
 }

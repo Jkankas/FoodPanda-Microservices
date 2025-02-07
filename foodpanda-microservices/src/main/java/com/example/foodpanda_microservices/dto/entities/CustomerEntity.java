@@ -23,6 +23,7 @@ import java.time.temporal.ChronoUnit;
 public class CustomerEntity {
 
 
+    @Column(name = "customer_id")
     private String customerId;
     private String fullName;
     @Id
@@ -35,6 +36,8 @@ public class CustomerEntity {
     private String state;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+
+
 
 
 //    @OneToOne
