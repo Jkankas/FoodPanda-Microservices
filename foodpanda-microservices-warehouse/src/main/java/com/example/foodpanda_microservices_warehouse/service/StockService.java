@@ -10,6 +10,7 @@ public interface StockService {
     ResponseEntity<ApiResponse> addStock(StockRequest request);
     ApiResponse fetchStock();
     ApiResponse fetchStockByDish(String dish);
+    ApiResponse updateStock(int stock,String dish);
 
 
 }

@@ -30,8 +30,8 @@ public class StockRepositoryImplementation implements StockRepository {
 
 
     @Override
-    public int updateStock(String dish) {
-        return jdbc.update(UPDATE_STOCK,dish);
+    public int updateStock(int stock,String dish) {
+        return jdbc.update(UPDATE_STOCK,stock,dish);
     }
 
 
