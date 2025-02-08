@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.awt.*;
 import java.rmi.MarshalledObject;
@@ -310,6 +311,8 @@ public class CustomerServiceImplementation implements CustomerService {
             throw new IllegalStateException("Dish out of Stock!");
         }
 
+        updateStock(quantity,dish);
+
         double price = checkDishPrice(dish);
         log.info("price,{}",dish);
         if(price==0.0){
@@ -317,7 +320,6 @@ public class CustomerServiceImplementation implements CustomerService {
         }
 
         CustomerEntity customerEntity = customerProfileJpaRepository.findByMobile(phone).get();
-
 
         double finalAmount = price * quantity;
 
@@ -331,8 +333,8 @@ public class CustomerServiceImplementation implements CustomerService {
 
         String customer_id = customerOrder.getCustomerEntity().getCustomerId();
 
-
         customerOrderJpaRepository.save(customerOrder);
+
         Optional<CustomerOrder> customerOrder1 = customerOrderJpaRepository.orderByCustomerId(customer_id);
         if(customerOrder1.isPresent()){
             return ApiResponse.prepareApiResponse(customerOrder1);
@@ -369,6 +371,7 @@ public class CustomerServiceImplementation implements CustomerService {
                 Map<String,Object> stockBody = objectMapper.convertValue(stockResult, new TypeReference<Map<String, Object>>(){});
                 Map<String,Object> result = objectMapper.convertValue(stockBody.get("result"), new TypeReference<Map<String, Object>>(){});
                 finalStocks = (int) result.get("stock");
+
             }
 
 
@@ -396,8 +399,7 @@ public class CustomerServiceImplementation implements CustomerService {
                     url,
                     HttpMethod.GET,
                     entity,
-                    new ParameterizedTypeReference<>() {
-                    },
+                    new ParameterizedTypeReference<>() {},
                     uriVariables
             );
 
@@ -415,6 +417,39 @@ public class CustomerServiceImplementation implements CustomerService {
         }
 
         return finalPrice;
+    }
+
+
+    public void updateStock(int stock,String dish){
+        String url = applicationProperties.getUpdateStock();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<Object> entity = new HttpEntity<>(headers);
+
+        String finalUrl = UriComponentsBuilder.fromHttpUrl(url).queryParam("stock",stock)
+                .queryParam("dish",dish).toUriString();
+
+
+        try{
+            ResponseEntity<Map<String,Object>> response = restTemplate.exchange(
+                    finalUrl,
+                    HttpMethod.POST,
+                    entity,
+                    new ParameterizedTypeReference<>(){}
+            );
+
+            Map<String,Object> resultSet = response.getBody();
+            if(resultSet!=null){
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String,Object> resultBody = mapper.convertValue(resultSet, new TypeReference<Map<String, Object>>() {});
+                if(!resultBody.get("message").equals("success") && !((int)resultBody.get("result")==1)){
+                    throw new IllegalStateException("Couldn't Update stocks!");
+                }
+            }
+
+        }catch (Exception e){
+            throw new IllegalStateException("Error while Updating stocks");
+        }
+
     }
 
 }

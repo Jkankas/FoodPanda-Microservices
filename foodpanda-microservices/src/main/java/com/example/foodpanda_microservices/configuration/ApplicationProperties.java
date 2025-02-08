@@ -11,4 +11,5 @@ public class ApplicationProperties {
 
     private String stockByDish;
     private String priceByDish;
+    private String updateStock;
 }
