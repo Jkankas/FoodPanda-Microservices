@@ -14,7 +14,7 @@ public interface StockRepository {
     void addStock(int stock,String dish);
     List<Map<String,Object>> fetchStock();
     Map<String,Object> fetchStockByDish(String dish);
-    int updateStock(String dish);
+    int updateStock(int stock,String dish);
 
 
 }

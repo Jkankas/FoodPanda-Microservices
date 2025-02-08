@@ -24,6 +24,7 @@ public class JwtConfig {
                         auth-> auth.requestMatchers(
                                 "/api/warehouse/auth/login",
                                         "/api/warehouse/getPriceByDish/*",
+                                        "/api/warehouse/updateStock",
                                         "/api/warehouse/fetchStockByDish/*").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

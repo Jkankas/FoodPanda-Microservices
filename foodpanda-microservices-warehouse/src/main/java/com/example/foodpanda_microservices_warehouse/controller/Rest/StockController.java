@@ -6,6 +6,7 @@ import com.example.foodpanda_microservices_warehouse.service.StockService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +44,9 @@ public class StockController {
         }
 
         // Update Stock
+        @PostMapping("/updateStock")
+        public ApiResponse updateStock(@Param("stock")int stock, @Param("dish") String dish){
+               return service.updateStock(stock,dish);
+        }
 
 }

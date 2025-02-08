@@ -38,7 +38,4 @@ public class PriceController {
         log.info("request received at getPriceByDish Controller,{}",dish);
         return service.fetchPriceByDish(dish);
     }
-
-
-
 }
