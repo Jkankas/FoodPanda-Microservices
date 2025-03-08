@@ -162,5 +162,6 @@ public class MenuServiceImplementation implements MenuService {
                 Paths.get(destinationPath)
         );
         System.out.println("File downloaded successfully: " + destinationPath);
+        System.out.println("something");
     }
 }
