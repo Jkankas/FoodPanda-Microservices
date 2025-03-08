@@ -10,7 +10,15 @@ import com.example.foodpanda_microservices.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -18,13 +26,18 @@ import java.util.*;
 public class MenuServiceImplementation implements MenuService {
 
      @Autowired
-    MenuRepository repository;
+   private MenuRepository repository;
 
      @Autowired
-     MenuJpaRepository menuJpaRepository;
+   private MenuJpaRepository menuJpaRepository;
 
      @Autowired
-     RestTemplate restTemplate;
+    private RestTemplate restTemplate;
+
+     @Autowired
+     private S3Client s3Client;
+
+    private static final String BUCKET_NAME = "foodpanda-invoice-bucket";
 
 
     @Override
@@ -121,4 +134,33 @@ public class MenuServiceImplementation implements MenuService {
 
     }
 
+
+    // Upload Invoice in aws-s3
+        public void uploadInvoice(MultipartFile file){
+            try {
+                PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                        .bucket(BUCKET_NAME)
+                        .key(file.getOriginalFilename()) // Use filename as key
+                        .contentType(file.getContentType())
+                        .build();
+
+                s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+            } catch (IOException e) {
+                throw new RuntimeException("Error uploading file to S3", e);
+            }
+        }
+
+
+
+    // Download a file from S3
+    public void downloadFile(String fileName, String destinationPath) {
+        s3Client.getObject(
+                GetObjectRequest.builder()
+                        .bucket(BUCKET_NAME)
+                        .key(fileName)
+                        .build(),
+                Paths.get(destinationPath)
+        );
+        System.out.println("File downloaded successfully: " + destinationPath);
+    }
 }

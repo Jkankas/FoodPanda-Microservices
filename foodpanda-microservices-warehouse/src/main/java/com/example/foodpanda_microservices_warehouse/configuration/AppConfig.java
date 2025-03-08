@@ -64,6 +64,7 @@ public class AppConfig {
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         source.registerCorsConfiguration("/**",configuration);
+        configuration.addAllowedOrigin("http://localhost:8080");
         return new CorsFilter(source);
     }
 
