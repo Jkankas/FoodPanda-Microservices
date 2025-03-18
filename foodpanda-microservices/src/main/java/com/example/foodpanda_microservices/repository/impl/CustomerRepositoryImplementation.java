@@ -17,4 +17,9 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
     public Map<String,Object> searchCustomId(String phone){
       return   jdbcTemplate.queryForMap(SEARCH_CUSTOMER_ID,phone);
     }
+
+
+    public Map<String,Object> searchCustomerDetails(String id){
+        return   jdbcTemplate.queryForMap(SEARCH_CUSTOMER_BY_ID,id);
+    }
 }

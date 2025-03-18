@@ -14,6 +14,7 @@ import com.example.foodpanda_microservices.repository.CustomerOrderJpaRepository
 import com.example.foodpanda_microservices.repository.CustomerProfileJpaRepository;
 import com.example.foodpanda_microservices.repository.CustomerRepository;
 import com.example.foodpanda_microservices.service.CustomerService;
+import com.example.foodpanda_microservices.service.MenuService;
 import com.example.foodpanda_microservices.util.JwtUtility;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,6 +75,9 @@ public class CustomerServiceImplementation implements CustomerService {
 
     @Autowired
     private ApplicationProperties applicationProperties;
+
+    @Autowired
+    private MenuService menuService;
 
 
     // Generate OTP
@@ -343,9 +347,6 @@ public class CustomerServiceImplementation implements CustomerService {
     }
 
 
-
-
-
     public int checkDishStock(String dish){
         int finalStocks = 0;
         String url = applicationProperties.getStockByDish();
@@ -450,6 +451,25 @@ public class CustomerServiceImplementation implements CustomerService {
             throw new IllegalStateException("Error while Updating stocks");
         }
 
+    }
+
+    // Update Order Status based on orderId
+
+
+    @Override
+    public boolean updateOrder(Long id, String status) {
+        Optional<Integer> order_status = customerOrderJpaRepository.updateOrderStatus(id,status);
+        Optional<CustomerOrder> orderDetails = customerOrderJpaRepository.getOrderDetails(id);
+        CustomerOrder customerOrder = orderDetails.get();
+        String invoiceNumber = customerOrder.getOrderId() + "FP"+ customerOrder.getCustomerEntity().getCustomerId()+".pdf";
+
+        System.out.println(order_status);
+        if(order_status.isPresent() && order_status.get()>0){
+            menuService.uploadInvoiceUpdated(id,invoiceNumber);
+//            menuService.generateInvoice(invoiceNumber,id);
+            return true;
+        }
+        return false;
     }
 
 }

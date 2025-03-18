@@ -64,6 +64,19 @@ public class CustomerController {
 
 
 
+    // Update Order Status
+    @PatchMapping("/order-status")
+    public ApiResponse updateOrderStatus(@RequestParam ("orderId") long id,@RequestParam("status") String status){
+        boolean result = customerService.updateOrder(id,status);
+        System.out.println(result);
+        if(result){
+            return ApiResponse.prepareApiResponse("Status Updated!");
+        }
+        return ApiResponse.prepareFailureApiResponse("Error Occurred while updating status");
+    }
+
+
+
 
 
 
