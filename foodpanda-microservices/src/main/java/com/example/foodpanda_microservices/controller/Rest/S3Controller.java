@@ -2,15 +2,11 @@ package com.example.foodpanda_microservices.controller.Rest;
 
 import com.example.foodpanda_microservices.dto.response.ApiResponse;
 import com.example.foodpanda_microservices.service.MenuService;
-import com.example.foodpanda_microservices.service.impl.MenuServiceImplementation;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfDocument;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @RestController
@@ -33,10 +29,16 @@ public class S3Controller {
 
 
     // Download a file from S3
+//    @GetMapping("/download/{fileName}")
+//    public String downloadFile(@PathVariable String fileName,@RequestParam String destinationPath) {
+//        menuService.downloadFile(fileName, destinationPath);
+//        return "File downloaded to: " + destinationPath;
+//    }
+
     @GetMapping("/download/{fileName}")
-    public String downloadFile(@PathVariable String fileName,@RequestParam String destinationPath) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String fileName, @RequestParam String destinationPath) {
         menuService.downloadFile(fileName, destinationPath);
-        return "File downloaded to: " + destinationPath;
+        return ResponseEntity.ok(menuService.downloadFile(fileName,destinationPath));
     }
 
 

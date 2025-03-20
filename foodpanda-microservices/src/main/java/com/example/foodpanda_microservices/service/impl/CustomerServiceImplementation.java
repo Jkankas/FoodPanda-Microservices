@@ -465,7 +465,8 @@ public class CustomerServiceImplementation implements CustomerService {
 
         System.out.println(order_status);
         if(order_status.isPresent() && order_status.get()>0){
-            menuService.uploadInvoiceUpdated(id,invoiceNumber);
+            menuService.uploadInvoiceFromBase64(id,invoiceNumber);
+//            menuService.uploadInvoiceUpdated(id,invoiceNumber);
 //            menuService.generateInvoice(invoiceNumber,id);
             return true;
         }
