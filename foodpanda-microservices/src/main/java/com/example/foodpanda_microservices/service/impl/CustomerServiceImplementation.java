@@ -4,9 +4,11 @@ import com.example.foodpanda_microservices.configuration.ApplicationProperties;
 import com.example.foodpanda_microservices.dto.entities.CustomerEntity;
 import com.example.foodpanda_microservices.dto.entities.CustomerLoginMetadata;
 import com.example.foodpanda_microservices.dto.entities.CustomerOrder;
+import com.example.foodpanda_microservices.dto.entities.OrderInvoiceInfo;
 import com.example.foodpanda_microservices.dto.request.*;
 import com.example.foodpanda_microservices.dto.response.ApiResponse;
 import com.example.foodpanda_microservices.dto.response.CustomerGenerateOtpResponse;
+import com.example.foodpanda_microservices.enums.OrderStatus;
 import com.example.foodpanda_microservices.helperClasses.IdGenerator;
 import com.example.foodpanda_microservices.helperClasses.PinCodeMaster;
 import com.example.foodpanda_microservices.repository.CustomerLoginJpaRepository;
@@ -37,6 +39,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.awt.*;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.rmi.MarshalledObject;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -78,6 +82,12 @@ public class CustomerServiceImplementation implements CustomerService {
 
     @Autowired
     private MenuService menuService;
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
+
+    @Autowired
+    private KafkaConsumer kafkaConsumer;
 
 
     // Generate OTP
@@ -306,8 +316,10 @@ public class CustomerServiceImplementation implements CustomerService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String phone = authentication.getPrincipal().toString();
 
-        String dish = order.getDish();
+        String dish = URLDecoder.decode(order.getDish(), StandardCharsets.UTF_8);
         int quantity = order.getQuantity();
+        String orderStatus = (order.getOrderStatus().equals(OrderStatus.CONFIRMED.toString()) ?
+                OrderStatus.ORDER_PLACED.toString() : OrderStatus.CANCELLED.toString());
 
         int stock = checkDishStock(dish);
         log.info("stock,{}",stock);
@@ -328,7 +340,7 @@ public class CustomerServiceImplementation implements CustomerService {
         double finalAmount = price * quantity;
 
         CustomerOrder customerOrder = new CustomerOrder();
-        customerOrder.setOrderStatus("Order Placed!");
+        customerOrder.setOrderStatus(orderStatus);
         customerOrder.setDish(dish);
         customerOrder.setPrice(finalAmount);
         customerOrder.setQuantity(quantity);
@@ -339,12 +351,36 @@ public class CustomerServiceImplementation implements CustomerService {
 
         customerOrderJpaRepository.save(customerOrder);
 
+
         Optional<CustomerOrder> customerOrder1 = customerOrderJpaRepository.orderByCustomerId(customer_id);
         if(customerOrder1.isPresent()){
             return ApiResponse.prepareApiResponse(customerOrder1);
         }
         return ApiResponse.prepareApiResponse(Optional.empty());
     }
+
+
+    @Override
+    public boolean updateOrder(Long id, String status) {
+        Optional<Integer> order_status = customerOrderJpaRepository.updateOrderStatus(id,status);
+        Optional<CustomerOrder> orderDetails = customerOrderJpaRepository.getOrderDetails(id);
+        CustomerOrder customerOrder = orderDetails.get();
+        String invoiceNumber = customerOrder.getOrderId() + "FP"+ customerOrder.getCustomerEntity().getCustomerId()+".pdf";
+        kafkaProducer.sendMessage(invoiceNumber);
+
+        System.out.println(order_status);
+        if(order_status.isPresent() && order_status.get()>0){
+            menuService.uploadInvoiceFromBase64(id);
+//            menuService.uploadInvoiceUpdated(id,invoiceNumber);
+//            menuService.generateInvoice(invoiceNumber,id);
+            return true;
+        }
+        return false;
+    }
+
+
+
+
 
 
     public int checkDishStock(String dish){
@@ -456,22 +492,7 @@ public class CustomerServiceImplementation implements CustomerService {
     // Update Order Status based on orderId
 
 
-    @Override
-    public boolean updateOrder(Long id, String status) {
-        Optional<Integer> order_status = customerOrderJpaRepository.updateOrderStatus(id,status);
-        Optional<CustomerOrder> orderDetails = customerOrderJpaRepository.getOrderDetails(id);
-        CustomerOrder customerOrder = orderDetails.get();
-        String invoiceNumber = customerOrder.getOrderId() + "FP"+ customerOrder.getCustomerEntity().getCustomerId()+".pdf";
 
-        System.out.println(order_status);
-        if(order_status.isPresent() && order_status.get()>0){
-            menuService.uploadInvoiceFromBase64(id,invoiceNumber);
-//            menuService.uploadInvoiceUpdated(id,invoiceNumber);
-//            menuService.generateInvoice(invoiceNumber,id);
-            return true;
-        }
-        return false;
-    }
 
 }
 

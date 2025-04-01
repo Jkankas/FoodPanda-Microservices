@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 @RestController
 @RequestMapping("/api/warehouse")
 public class StockController {
@@ -46,7 +49,7 @@ public class StockController {
         // Update Stock
         @PostMapping("/updateStock")
         public ApiResponse updateStock(@Param("stock")int stock, @Param("dish") String dish){
-               return service.updateStock(stock,dish);
+               return service.updateStock(stock, dish);
         }
 
 }

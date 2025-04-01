@@ -12,6 +12,9 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -95,10 +98,11 @@ public class StockServiceImplementation implements StockService {
         int originalStock = 0;
         int remainingStock = 0;
         try{
-            Map<String,Object> originalStockMap = repository.fetchStockByDish(dish);
+            String decodedDishName = URLDecoder.decode(dish, StandardCharsets.UTF_8);
+            Map<String,Object> originalStockMap = repository.fetchStockByDish(decodedDishName);
             originalStock = (int)originalStockMap.get("stock");
             remainingStock = originalStock - stock;
-            updatedStock = repository.updateStock(remainingStock,dish);
+            updatedStock = repository.updateStock(remainingStock,decodedDishName);
         }catch (Exception ex){
          throw new IllegalStateException("Error while Updating");
 //            return ApiResponse.prepareApiResponse(ex.getMessage());

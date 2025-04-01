@@ -15,7 +15,7 @@ public interface MenuService {
       void generateInvoice(String invoiceName,long id);
       void uploadInvoiceUpdated(long orderId,String invoiceNo);
       byte[] generateInvoiceUpdated(long id);
-      void uploadInvoiceFromBase64(long orderId,String invoiceNo);
+      void uploadInvoiceFromBase64(long orderId);
       String generateInvoiceFromBase64(long id);
 
 

@@ -46,6 +46,9 @@ public class MenuServiceImplementation implements MenuService {
     @Autowired
     private CustomerOrderJpaRepository customerOrderJpaRepository;
 
+    @Autowired
+    private KafkaConsumer kafkaConsumer;
+
 
     private static final String BUCKET_NAME = "invoice-bucket";
 
@@ -172,9 +175,11 @@ public class MenuServiceImplementation implements MenuService {
     }
 
     // Upload directly to s3 without having need to provide file from postman.
-    public void uploadInvoiceFromBase64(long orderId,String invoiceNo) {
+    public void uploadInvoiceFromBase64(long orderId) {
         String base64 = generateInvoiceFromBase64(orderId);
         byte[] pdfBytes = Base64.getDecoder().decode(base64);
+
+        String invoiceNo = kafkaConsumer.returnMessage();
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(BUCKET_NAME)
@@ -424,6 +429,14 @@ public class MenuServiceImplementation implements MenuService {
         }
         return pdfBytes;
     }
+
+
+
+
+
+
+
+
 
 
     public String generateInvoiceFromBase64(long id) {
