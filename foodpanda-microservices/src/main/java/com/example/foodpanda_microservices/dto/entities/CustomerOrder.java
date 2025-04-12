@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 public class CustomerOrder {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long orderId;
     private String dish;
     private Double price;

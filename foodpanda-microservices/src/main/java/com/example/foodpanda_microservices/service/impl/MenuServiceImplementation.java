@@ -432,13 +432,6 @@ public class MenuServiceImplementation implements MenuService {
 
 
 
-
-
-
-
-
-
-
     public String generateInvoiceFromBase64(long id) {
         byte[] pdfBytes = null;
         String base64=null;

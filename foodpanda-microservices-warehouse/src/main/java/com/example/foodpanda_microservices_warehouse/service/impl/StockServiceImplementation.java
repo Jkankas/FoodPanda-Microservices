@@ -2,6 +2,7 @@ package com.example.foodpanda_microservices_warehouse.service.impl;
 
 import com.example.foodpanda_microservices_warehouse.configuration.ApplicationProperties;
 import com.example.foodpanda_microservices_warehouse.dto.request.StockRequest;
+import com.example.foodpanda_microservices_warehouse.dto.request.UpdateStockRequestV1;
 import com.example.foodpanda_microservices_warehouse.dto.response.ApiResponse;
 import com.example.foodpanda_microservices_warehouse.dto.response.MenuListResponse;
 import com.example.foodpanda_microservices_warehouse.dto.response.StockResponse;
@@ -17,8 +18,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-
-
+import java.util.Optional;
 
 
 @Service
@@ -93,6 +93,15 @@ public class StockServiceImplementation implements StockService {
     }
 
 
+    public ApiResponse fetchStockByDishV1(List<String> dish){
+        List<Map<String,Object>> map = repository.fetchStockByDishV1(dish);
+        if(ObjectUtils.isEmpty(map)){
+            return ApiResponse.prepareFailApiResponse("Dishes not found!");
+        }
+        return ApiResponse.prepareApiResponse(map);
+    }
+
+
     public ApiResponse updateStock(int stock,String dish){
         int updatedStock = 0;
         int originalStock = 0;
@@ -107,6 +116,17 @@ public class StockServiceImplementation implements StockService {
          throw new IllegalStateException("Error while Updating");
 //            return ApiResponse.prepareApiResponse(ex.getMessage());
 //            return ApiResponse.prepareFailApiResponse("Error");
+        }
+        return ApiResponse.prepareApiResponse(updatedStock);
+    }
+
+
+    public ApiResponse updateStockV1(UpdateStockRequestV1 requestV1){
+        int updatedStock = 0;
+        try{
+            updatedStock = repository.updateStockV1(requestV1);
+        }catch (Exception ex){
+            throw new IllegalStateException("Error while Updating");
         }
         return ApiResponse.prepareApiResponse(updatedStock);
     }

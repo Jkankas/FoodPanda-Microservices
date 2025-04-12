@@ -13,6 +13,7 @@ public interface CustomerService {
     ApiResponse saveProfile(CustomerEntityRequest request);
     ApiResponse updateProfile(UpdateProfileRequest request);
     ApiResponse customerOrder(CustomerOrderRequest order);
+    ApiResponse customerOrderV1(CustomerOrderRequestNew order);
     boolean updateOrder(Long id,String status);
 //     ApiResponse deleteMetadata(String phone);
 

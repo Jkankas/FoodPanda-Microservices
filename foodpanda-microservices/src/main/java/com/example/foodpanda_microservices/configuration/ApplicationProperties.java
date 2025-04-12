@@ -11,5 +11,8 @@ public class ApplicationProperties {
 
     private String stockByDish;
     private String priceByDish;
+    private String priceByDishV1;
     private String updateStock;
+    private String updateStockV1;
+    private String stockByDishV1;
 }

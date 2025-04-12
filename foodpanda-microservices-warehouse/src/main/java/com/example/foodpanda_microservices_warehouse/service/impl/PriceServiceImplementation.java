@@ -1,6 +1,7 @@
 package com.example.foodpanda_microservices_warehouse.service.impl;
 
 import com.example.foodpanda_microservices_warehouse.dto.request.AddPriceRequest;
+import com.example.foodpanda_microservices_warehouse.dto.request.DishPriceRequestV1;
 import com.example.foodpanda_microservices_warehouse.dto.response.AddPriceResponse;
 import com.example.foodpanda_microservices_warehouse.dto.response.ApiResponse;
 import com.example.foodpanda_microservices_warehouse.repository.PriceRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,6 +40,12 @@ public class PriceServiceImplementation implements PriceService {
 
     public ApiResponse fetchPriceByDish(String dish){
       Map<String,Object> priceInfo = repository.fetchPriceByDish(dish);
+        return ApiResponse.prepareApiResponse(priceInfo);
+    }
+
+
+    public ApiResponse fetchPriceByDishV1(DishPriceRequestV1 requestV1){
+        List<Map<String,Object>> priceInfo = repository.fetchPriceByDishV1(requestV1.getDishes());
         return ApiResponse.prepareApiResponse(priceInfo);
     }
 

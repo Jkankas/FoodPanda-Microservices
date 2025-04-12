@@ -150,6 +150,34 @@
 			<version>1.8.0</version>
 		</dependency>
 
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<version>3.4.4</version>
+		</dependency>
+
+
+
+		<!-- https://mvnrepository.com/artifact/org.xhtmlrenderer/flying-saucer-pdf -->
+		<dependency>
+			<groupId>org.xhtmlrenderer</groupId>
+			<artifactId>flying-saucer-pdf</artifactId>
+			<version>9.11.5</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.bucket4j/bucket4j-core -->
+		<dependency>
+			<groupId>com.bucket4j</groupId>
+			<artifactId>bucket4j-core</artifactId>
+			<version>8.10.1</version>
+		</dependency>
+
+
+
+
+
 <!--		<dependency>-->
 <!--			<groupId>org.springdoc</groupId>-->
 <!--			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>-->

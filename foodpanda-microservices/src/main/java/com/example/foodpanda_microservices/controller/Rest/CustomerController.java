@@ -1,9 +1,6 @@
 package com.example.foodpanda_microservices.controller.Rest;
 
-import com.example.foodpanda_microservices.dto.request.CustomerEntityRequest;
-import com.example.foodpanda_microservices.dto.request.CustomerGenerateOtpRequest;
-import com.example.foodpanda_microservices.dto.request.CustomerOrderRequest;
-import com.example.foodpanda_microservices.dto.request.UpdateProfileRequest;
+import com.example.foodpanda_microservices.dto.request.*;
 import com.example.foodpanda_microservices.dto.response.ApiResponse;
 import com.example.foodpanda_microservices.dto.response.CustomerGenerateOtpResponse;
 import com.example.foodpanda_microservices.service.CustomerService;
@@ -60,6 +57,15 @@ public class CustomerController {
     @PostMapping("/customer-order")
     public ApiResponse customerOrder( @RequestBody CustomerOrderRequest request){
        return customerService.customerOrder(request);
+    }
+
+
+
+
+    // Order a Dish-V1
+    @PostMapping("/customer-order-v1")
+    public ApiResponse customerOrderV1( @RequestBody CustomerOrderRequestNew request){
+        return customerService.customerOrderV1(request);
     }
 
 

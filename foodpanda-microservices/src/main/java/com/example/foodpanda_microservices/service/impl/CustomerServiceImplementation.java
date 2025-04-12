@@ -8,6 +8,7 @@ import com.example.foodpanda_microservices.dto.entities.OrderInvoiceInfo;
 import com.example.foodpanda_microservices.dto.request.*;
 import com.example.foodpanda_microservices.dto.response.ApiResponse;
 import com.example.foodpanda_microservices.dto.response.CustomerGenerateOtpResponse;
+import com.example.foodpanda_microservices.dto.response.UpdateStockResponse;
 import com.example.foodpanda_microservices.enums.OrderStatus;
 import com.example.foodpanda_microservices.helperClasses.IdGenerator;
 import com.example.foodpanda_microservices.helperClasses.PinCodeMaster;
@@ -16,10 +17,12 @@ import com.example.foodpanda_microservices.repository.CustomerOrderJpaRepository
 import com.example.foodpanda_microservices.repository.CustomerProfileJpaRepository;
 import com.example.foodpanda_microservices.repository.CustomerRepository;
 import com.example.foodpanda_microservices.service.CustomerService;
+import com.example.foodpanda_microservices.service.InvoiceService;
 import com.example.foodpanda_microservices.service.MenuService;
 import com.example.foodpanda_microservices.util.JwtUtility;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import io.micrometer.observation.ObservationTextPublisher;
 import org.apache.coyote.Response;
 import org.apache.tomcat.util.http.parser.Authorization;
@@ -37,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.awt.*;
 import java.net.URLDecoder;
@@ -46,9 +50,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.List;
 
 @Service
 public class CustomerServiceImplementation implements CustomerService {
@@ -88,6 +91,9 @@ public class CustomerServiceImplementation implements CustomerService {
 
     @Autowired
     private KafkaConsumer kafkaConsumer;
+
+//    @Autowired
+//    private InvoiceService invoiceService;
 
 
     // Generate OTP
@@ -346,7 +352,6 @@ public class CustomerServiceImplementation implements CustomerService {
         customerOrder.setQuantity(quantity);
         customerOrder.setOrderedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         customerOrder.setCustomerEntity(customerEntity);
-
         String customer_id = customerOrder.getCustomerEntity().getCustomerId();
 
         customerOrderJpaRepository.save(customerOrder);
@@ -357,6 +362,89 @@ public class CustomerServiceImplementation implements CustomerService {
             return ApiResponse.prepareApiResponse(customerOrder1);
         }
         return ApiResponse.prepareApiResponse(Optional.empty());
+    }
+
+
+    //Refactor the code tomorrow(03/04/2025)
+
+    @Transactional
+    public ApiResponse customerOrderV1(CustomerOrderRequestNew order){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String phone = authentication.getPrincipal().toString();
+
+        Map<String,Integer> items = new HashMap<>();
+        List<String> dishes = order.getDishes();
+        List<Integer> quantities = order.getQuantities();
+
+        for(int i=0;i<quantities.size();i++){
+            items.put(dishes.get(i),quantities.get(i));
+        }
+        log.info("Items list ,{}",items);
+
+        String orderStatus = (order.getOrderStatus().equals(OrderStatus.CONFIRMED.toString()) ?
+                OrderStatus.ORDER_PLACED.toString() : OrderStatus.CANCELLED.toString());
+
+        List<Integer> stockList = getStocksInfo(order, items);
+        updateStockV1(order.getDishes(),stockList);
+
+        Map<String,Double> finalAmount = new HashMap<>();
+        List<Map<String,Object>> dishPrices =  checkDishPriceV1(order.getDishes());
+        for(Map<String,Object> map : dishPrices){
+           double price = (double) map.get("price")* items.get(map.get("dish"));
+           finalAmount.put( (String)map.get("dish"),price);
+       }
+        CustomerEntity customerEntity = customerProfileJpaRepository.findByMobile(phone)
+                .orElseThrow(()-> new IllegalArgumentException("Customer Not found with this Number"+phone));
+
+        List<CustomerOrder> customerOrderList = new ArrayList<>();
+        pojoToEntityConverter(dishes, orderStatus, finalAmount, quantities, customerEntity, customerOrderList);
+        if(!ObjectUtils.isEmpty(customerOrderList)){
+            return ApiResponse.prepareApiResponse(customerOrderList);
+        }
+        return ApiResponse.prepareApiResponse(Optional.empty());
+    }
+
+
+
+
+
+
+
+    private void pojoToEntityConverter(List<String> dishes, String orderStatus, Map<String, Double> finalAmount, List<Integer> quantities, CustomerEntity customerEntity, List<CustomerOrder> customerOrderList) {
+        for(int i = 0; i< dishes.size(); i++){
+            CustomerOrder customerOrder = new CustomerOrder();
+            customerOrder.setOrderStatus(orderStatus);
+            customerOrder.setDish(dishes.get(i));
+            customerOrder.setPrice(finalAmount.get(dishes.get(i)));
+            customerOrder.setQuantity(quantities.get(i));
+            customerOrder.setOrderedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+            customerOrder.setCustomerEntity(customerEntity);
+            customerOrder =  customerOrderJpaRepository.save(customerOrder);
+            customerOrderList.add(customerOrder);
+        }
+    }
+
+
+
+    private List<Integer> getStocksInfo(CustomerOrderRequestNew order, Map<String, Integer> items) {
+        Map<String,Object> stockResult =  checkDishStockV1(order.getDishes());
+        log.info("order List,{}", order.getDishes());
+
+        List<Integer> stockList = new ArrayList<>();
+
+        for(Map.Entry<String,Object> map : stockResult.entrySet()){
+            if((Integer)map.getValue()==0){
+                throw new IllegalStateException("Dish out of Stock: "+map.getKey());
+            }
+            else{
+                String key = map.getKey();
+                int val = (int) map.getValue();
+                int finalStock = val -  items.get(key);
+                stockList.add(finalStock);
+            }
+        }
+        return stockList;
     }
 
 
@@ -377,7 +465,6 @@ public class CustomerServiceImplementation implements CustomerService {
         }
         return false;
     }
-
 
 
 
@@ -410,15 +497,61 @@ public class CustomerServiceImplementation implements CustomerService {
                 finalStocks = (int) result.get("stock");
 
             }
-
-
         }catch (Exception ex){
             throw new IllegalStateException("Error while fetching stocks!");
         }
-
        return finalStocks;
-
     }
+
+
+
+
+
+
+    public Map<String,Object> checkDishStockV1(List<String> request){
+      final  Map<String,Object> stockList = new HashMap<>();
+        int finalStocks = 0;
+        String url = applicationProperties.getStockByDishV1();
+        HttpHeaders headers = new HttpHeaders();
+        Map<String,Object> req = new HashMap<>();
+        req.put("dishes",request);
+        HttpEntity<Map<String,Object>> entity = new HttpEntity<>(req,headers);
+
+        try{
+            ResponseEntity<Map<String,Object>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entity,
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+
+            Map<String,Object> stockResult = response.getBody();
+            if(stockResult != null){
+                ObjectMapper objectMapper = new ObjectMapper();
+                Map<String,Object> stockBody = objectMapper.convertValue(stockResult, new TypeReference<>() {
+                });
+                List<Map<String,Object>> result = objectMapper.convertValue(stockBody.get("result"), new TypeReference<>() {
+                });
+                if(result != null){
+//                     stockList = objectMapper.convertValue(result, new TypeReference<>() {
+//                    });
+                    for(Map<String,Object> map : result){
+                       String dish = (String)map.get("dish");
+                       Integer stock = (Integer)map.get("stock");
+
+                       if(dish!=null){
+                           stockList.put(dish,stock);
+                       }
+                    }
+                }
+            }
+        }catch (Exception ex){
+            throw new IllegalStateException("Error while fetching stocks!");
+        }
+        return stockList;
+    }
+
 
 
     public double checkDishPrice(String dish){
@@ -457,6 +590,40 @@ public class CustomerServiceImplementation implements CustomerService {
     }
 
 
+
+    public List<Map<String,Object>> checkDishPriceV1(List<String> dishes){
+
+        List<Map<String,Object>> resultSet = new ArrayList<>();
+
+        String url = applicationProperties.getPriceByDishV1();
+        HttpHeaders headers = new HttpHeaders();
+        Map<String,Object> dishRequest = new HashMap<>();
+        dishRequest.put("dishes",dishes);
+        HttpEntity<Map<String,Object>> entity = new HttpEntity<>(dishRequest,headers);
+
+        try{
+            ResponseEntity<Map<String,Object>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entity,
+                    new ParameterizedTypeReference<>() {}
+            );
+
+            Map<String,Object> stockResult = response.getBody();
+            if(stockResult != null){
+                ObjectMapper objectMapper = new ObjectMapper();
+                 resultSet = objectMapper.convertValue(stockResult.get("result"), new TypeReference<List<Map<String,Object>>>() {
+                });
+                 log.info("resultSet,{}",resultSet);
+            }
+        }catch (Exception ex){
+            throw new IllegalStateException("Error while fetching price!");
+        }
+        return resultSet ;
+    }
+
+
+
     public void updateStock(int stock,String dish){
         String url = applicationProperties.getUpdateStock();
         HttpHeaders headers = new HttpHeaders();
@@ -479,6 +646,42 @@ public class CustomerServiceImplementation implements CustomerService {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String,Object> resultBody = mapper.convertValue(resultSet, new TypeReference<Map<String, Object>>() {});
                 if(!resultBody.get("message").equals("success") && !((int)resultBody.get("result")==1)){
+                    throw new IllegalStateException("Couldn't Update stocks!");
+                }
+            }
+
+        }catch (Exception e){
+            throw new IllegalStateException("Error while Updating stocks");
+        }
+
+    }
+
+
+    public void updateStockV1(List<String> dishes , List<Integer> stocks){
+        String url = applicationProperties.getUpdateStockV1();
+        HttpHeaders headers = new HttpHeaders();
+
+
+        UpdateStockResponse response = new UpdateStockResponse();
+        response.setDishes(dishes);
+        response.setStocks(stocks);
+
+
+        HttpEntity<UpdateStockResponse> entity = new HttpEntity<>(response,headers);
+
+        try{
+            ResponseEntity<Map<String,Object>> response1 = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entity,
+                    new ParameterizedTypeReference<>(){}
+            );
+
+            Map<String,Object> resultSet = response1.getBody();
+            if(resultSet!=null){
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String,Object> resultBody = mapper.convertValue(resultSet, new TypeReference<Map<String, Object>>() {});
+                if(!resultBody.get("message").equals("success") && !((int)resultBody.get("result")>=1)){
                     throw new IllegalStateException("Couldn't Update stocks!");
                 }
             }

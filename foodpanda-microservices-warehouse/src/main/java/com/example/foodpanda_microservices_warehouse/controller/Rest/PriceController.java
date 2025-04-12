@@ -1,6 +1,7 @@
 package com.example.foodpanda_microservices_warehouse.controller.Rest;
 
 import com.example.foodpanda_microservices_warehouse.dto.request.AddPriceRequest;
+import com.example.foodpanda_microservices_warehouse.dto.request.DishPriceRequestV1;
 import com.example.foodpanda_microservices_warehouse.dto.response.ApiResponse;
 import com.example.foodpanda_microservices_warehouse.service.PriceService;
 import jakarta.validation.Valid;
@@ -37,5 +38,11 @@ public class PriceController {
     public ApiResponse fetchPriceByDish(@PathVariable String dish){
         log.info("request received at getPriceByDish Controller,{}",dish);
         return service.fetchPriceByDish(dish);
+    }
+
+    @PostMapping("/getPriceByDishV1")
+    public ApiResponse fetchPriceByDishV1(@RequestBody DishPriceRequestV1 requestV1){
+        log.info("request received at getPriceByDish Controller,{}",requestV1);
+        return service.fetchPriceByDishV1(requestV1);
     }
 }

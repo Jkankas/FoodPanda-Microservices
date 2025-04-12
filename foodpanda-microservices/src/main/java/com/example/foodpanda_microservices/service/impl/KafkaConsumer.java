@@ -10,7 +10,7 @@ public class KafkaConsumer {
     private String latestMessage;
 
 
-    @KafkaListener(topics = "test-topic" ,groupId = "my-group")
+    @KafkaListener(topics = "test-topic" ,groupId = "my-group",autoStartup = "false")
     public void consume(ConsumerRecord<String,String> record){
         System.out.println("Received Message: " + record.value());
         latestMessage =  record.value();
