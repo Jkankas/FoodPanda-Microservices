@@ -13,4 +13,9 @@ public interface CustomerProfileJpaRepository extends JpaRepository<CustomerEnti
     @Query(value = "select * from customer_profile where phone_number=:number",nativeQuery = true)
     Optional<CustomerEntity> findByMobile(@Param("number") String number);
 
+
+
+    @Query(value = "select * from customer_profile where customer_id=:id",nativeQuery = true)
+    Optional<CustomerEntity> findByCustomerId(@Param("id") String id);
+
 }

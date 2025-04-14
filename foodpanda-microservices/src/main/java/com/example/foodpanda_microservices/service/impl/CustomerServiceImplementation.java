@@ -49,6 +49,7 @@ import java.rmi.MarshalledObject;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.List;
@@ -407,10 +408,6 @@ public class CustomerServiceImplementation implements CustomerService {
 
 
 
-
-
-
-
     private void pojoToEntityConverter(List<String> dishes, String orderStatus, Map<String, Double> finalAmount, List<Integer> quantities, CustomerEntity customerEntity, List<CustomerOrder> customerOrderList) {
         for(int i = 0; i< dishes.size(); i++){
             CustomerOrder customerOrder = new CustomerOrder();
@@ -465,6 +462,96 @@ public class CustomerServiceImplementation implements CustomerService {
         }
         return false;
     }
+
+
+
+
+    public ApiResponse updateOrderV1(UpdateOrderV1Request request) {
+        Optional<List<CustomerOrder>> getBulkOrderDetails;
+        Optional<CustomerEntity> CustomerDetails;
+        List<CustomerOrder> orderDetailsList = List.of();
+        String invoiceNo="";
+
+        List<Map<String, Object>> orderDetailsList1;
+        Map<String, Object> customerDetailsMap;
+        if (OrderStatus.DELIVERED.toString().equals(request.getStatus())) {
+            try {
+                Optional<Integer> updateBulkOrder = customerOrderJpaRepository.updateBulkOrderStatus(request.getOrderIds(), request.getStatus());
+                if (updateBulkOrder.isEmpty()) {
+                    throw new IllegalStateException("Error while Updating Orders Status");
+                }
+                getBulkOrderDetails = customerOrderJpaRepository.getBulkOrderDetails(request.getOrderIds());
+                if (getBulkOrderDetails.isPresent()) {
+                    orderDetailsList = getBulkOrderDetails.get();
+                } else {
+                    throw new IllegalStateException("Error fetching Order Details!");
+                }
+
+                orderDetailsList1 = new ArrayList<>();
+                String customerId = null;
+
+                String orderId = null;
+                for (CustomerOrder customerOrder : orderDetailsList) {
+                    customerId = customerOrder.getCustomerEntity().getCustomerId();
+                    Map<String, Object> orderDetails = new HashMap<>();
+                    orderDetails.put("orderId", customerOrder.getOrderId());
+                    orderDetails.put("dish", customerOrder.getDish());
+                    orderDetails.put("price", customerOrder.getPrice());
+                    orderDetails.put("quantity", customerOrder.getQuantity());
+                    orderDetailsList1.add(orderDetails);
+                }
+
+                CustomerEntity customerEntity = null;
+                CustomerDetails = customerProfileJpaRepository.findByCustomerId(customerId);
+                if (CustomerDetails.isPresent()) {
+                    customerEntity = CustomerDetails.get();
+                }
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                customerDetailsMap = new HashMap<>();
+                assert customerEntity != null;
+                 invoiceNo = customerEntity.getCustomerId() + "Id" + IdGenerator.generateRandomId();
+                customerDetailsMap.put("address", customerEntity.getAddress());
+                customerDetailsMap.put("state", customerEntity.getState());
+                customerDetailsMap.put("city", customerEntity.getCity());
+                customerDetailsMap.put("pin", customerEntity.getPin());
+                customerDetailsMap.put("phone", customerEntity.getPhoneNumber());
+                customerDetailsMap.put("fullName", customerEntity.getFullName());
+                customerDetailsMap.put("invoiceNo", invoiceNo);
+                customerDetailsMap.put("date", LocalDateTime.now().format(formatter));
+
+
+
+            } catch (Exception e) {
+                throw new IllegalStateException("Error Updating Orders");
+            }
+        } else {
+            return ApiResponse.prepareFailureApiResponse("Invalid Order Status");
+        }
+        menuService.uploadInvoiceFromBase64V1(orderDetailsList1, customerDetailsMap);
+        return ApiResponse.prepareApiResponse(invoiceNo);
+    }
+
+
+
+
+    /*
+        Update Order V1 requirements:
+        Items Info:
+        Order No.
+        dish Name
+        Quantity
+        Amount
+        Invoice Number
+
+          Address Info:
+        Customer Add.(To)
+        City
+        state
+        Company Address(From)
+
+        Total Payable amount
+
+     */
 
 
 

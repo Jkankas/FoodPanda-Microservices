@@ -15,6 +15,7 @@ public interface CustomerService {
     ApiResponse customerOrder(CustomerOrderRequest order);
     ApiResponse customerOrderV1(CustomerOrderRequestNew order);
     boolean updateOrder(Long id,String status);
+    ApiResponse updateOrderV1(UpdateOrderV1Request request);
 //     ApiResponse deleteMetadata(String phone);
 
 }

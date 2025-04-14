@@ -25,6 +25,7 @@ public class CustomerOrder {
     private int quantity;
     private LocalDateTime orderedAt;
     private String orderStatus;
+    private String invoiceNo;
 
 
     @ManyToOne()

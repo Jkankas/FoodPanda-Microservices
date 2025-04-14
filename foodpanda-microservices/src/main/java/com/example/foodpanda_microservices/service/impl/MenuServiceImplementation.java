@@ -4,6 +4,7 @@ import com.example.foodpanda_microservices.dto.entities.CustomerOrder;
 import com.example.foodpanda_microservices.dto.entities.Menu;
 import com.example.foodpanda_microservices.dto.request.MenuRequest;
 import com.example.foodpanda_microservices.dto.response.*;
+import com.example.foodpanda_microservices.helperClasses.InvoiceGenerator;
 import com.example.foodpanda_microservices.repository.*;
 import com.example.foodpanda_microservices.service.MenuService;
 import com.itextpdf.text.*;
@@ -21,6 +22,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.List;
 
@@ -48,6 +50,10 @@ public class MenuServiceImplementation implements MenuService {
 
     @Autowired
     private KafkaConsumer kafkaConsumer;
+
+
+    @Autowired
+    private InvoiceGenerator invoiceGenerator;
 
 
     private static final String BUCKET_NAME = "invoice-bucket";
@@ -193,6 +199,20 @@ public class MenuServiceImplementation implements MenuService {
 
 
 
+    public void uploadInvoiceFromBase64V1(List<Map<String,Object>>orderDetailslist,Map<String,Object> customerDetailsMap) {
+        byte[] base64 = invoiceGenerator.generateInvoiceV1(orderDetailslist,customerDetailsMap);
+
+//        String invoiceNo = kafkaConsumer.returnMessage();
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key((String) customerDetailsMap.get("invoiceNo")) // Use filename as key
+                .contentType("application/pdf")
+                .build();
+
+        s3Client.putObject(putObjectRequest, RequestBody.fromBytes(base64));
+    }
+
+
 
     // Download a file from S3
 //    public void downloadFile(String fileName, String destinationPath) {
@@ -215,13 +235,26 @@ public class MenuServiceImplementation implements MenuService {
 
 
 // Download files as bytes directly in response
-    public byte[] downloadFile(String fileName, String destinationPath) {
+    public byte[] downloadFile(String fileName,String destinationPath) {
        return   s3Client.getObject(
                 GetObjectRequest.builder()
                         .bucket(BUCKET_NAME)
                         .key(fileName)
                         .build(),
                ResponseTransformer.toBytes()
+        ).asByteArray();
+    }
+
+
+
+
+    public byte[] downloadFileV1(String fileName) {
+        return   s3Client.getObject(
+                GetObjectRequest.builder()
+                        .bucket(BUCKET_NAME)
+                        .key(fileName)
+                        .build(),
+                ResponseTransformer.toBytes()
         ).asByteArray();
     }
 
@@ -527,6 +560,13 @@ public class MenuServiceImplementation implements MenuService {
             e.printStackTrace();
         }
         return base64;
+    }
+
+
+
+
+    public String generateInvoiceV1(){
+        return null;
     }
 
 

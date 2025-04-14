@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 @RestController
 public class S3Controller {
@@ -37,9 +38,18 @@ public class S3Controller {
 
     @GetMapping("/download/{fileName}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable String fileName, @RequestParam String destinationPath) {
-        menuService.downloadFile(fileName, destinationPath);
+        String decodedFileName = URLDecoder.decode(fileName);
+        menuService.downloadFile(decodedFileName, destinationPath);
         return ResponseEntity.ok(menuService.downloadFile(fileName,destinationPath));
     }
+
+
+    @GetMapping("/download/v1/{fileName}")
+    public ResponseEntity<byte[]> downloadFileV1(@PathVariable String fileName) {
+        menuService.downloadFileV1(fileName);
+        return ResponseEntity.ok(menuService.downloadFileV1(fileName));
+    }
+
 
 
     @PostMapping("/generate/invoice/{invoiceName}")

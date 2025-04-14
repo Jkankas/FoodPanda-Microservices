@@ -84,6 +84,15 @@ public class CustomerController {
 
 
 
+    @PatchMapping("/order-status-v1")
+    public ApiResponse updateOrderStatusV1(@RequestBody  UpdateOrderV1Request request){
+        return  customerService.updateOrderV1(request);
+    }
+
+
+
+
+
 
 
     // Delete Login Metadata
