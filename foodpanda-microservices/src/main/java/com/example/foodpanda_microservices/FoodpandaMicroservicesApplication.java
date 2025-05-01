@@ -19,5 +19,4 @@ public class FoodpandaMicroservicesApplication {
 		String formatted = "'" + String.join("','", ids) + "'";
 		System.out.println(formatted);
 	}
-
 }

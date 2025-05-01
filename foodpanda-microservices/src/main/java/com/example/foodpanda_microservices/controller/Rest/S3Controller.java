@@ -3,12 +3,15 @@ package com.example.foodpanda_microservices.controller.Rest;
 import com.example.foodpanda_microservices.dto.response.ApiResponse;
 import com.example.foodpanda_microservices.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 public class S3Controller {
@@ -44,11 +47,23 @@ public class S3Controller {
     }
 
 
+
     @GetMapping("/download/v1/{fileName}")
     public ResponseEntity<byte[]> downloadFileV1(@PathVariable String fileName) {
-        menuService.downloadFileV1(fileName);
-        return ResponseEntity.ok(menuService.downloadFileV1(fileName));
+        byte[] invoiceResponse = menuService.downloadFileV1(fileName);
+
+        // Format current date
+        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String fullFileName = fileName + "_" + currentDate + ".pdf";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fullFileName + "\"")
+                .header(HttpHeaders.CONTENT_TYPE, "application/pdf")
+                .body(invoiceResponse);
     }
+
+
+
 
 
 

@@ -374,6 +374,11 @@ public class CustomerServiceImplementation implements CustomerService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String phone = authentication.getPrincipal().toString();
 
+        if(order.getDishes().size()!=order.getQuantities().size()){
+            return ApiResponse.prepareFailureApiResponse("Quantities & Order Mismatch");
+        }
+
+
         Map<String,Integer> items = new HashMap<>();
         List<String> dishes = order.getDishes();
         List<Integer> quantities = order.getQuantities();
@@ -554,9 +559,6 @@ public class CustomerServiceImplementation implements CustomerService {
      */
 
 
-
-
-
     public int checkDishStock(String dish){
         int finalStocks = 0;
         String url = applicationProperties.getStockByDish();
@@ -589,10 +591,6 @@ public class CustomerServiceImplementation implements CustomerService {
         }
        return finalStocks;
     }
-
-
-
-
 
 
     public Map<String,Object> checkDishStockV1(List<String> request){
