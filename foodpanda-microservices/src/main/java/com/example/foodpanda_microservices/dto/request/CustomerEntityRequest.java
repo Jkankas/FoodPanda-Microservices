@@ -1,7 +1,4 @@
 package com.example.foodpanda_microservices.dto.request;
-
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 
