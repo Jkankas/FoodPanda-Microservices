@@ -28,9 +28,17 @@ public class AdminServiceImplementation implements AdminService {
    private AdminRepository repository;
 
     @Autowired
-    AdminJpaRepository jpaRepository;
+    private AdminJpaRepository jpaRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     public ApiResponse createUser(AdminEntityRequest user){
+
+        Map<String,Object> checkEmail = adminRepository.userProfile(user.getEmail());
+        if(!checkEmail.isEmpty()){
+            return ApiResponse.prepareFailureApiResponse("User With Email Already Exists!");
+        }
 
        Map<String,String> cityStateData = fetchStateCityByPin(user.getPin());
         if(ObjectUtils.isEmpty(cityStateData)){

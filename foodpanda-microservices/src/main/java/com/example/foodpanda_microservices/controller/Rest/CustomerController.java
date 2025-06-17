@@ -90,7 +90,10 @@ public class CustomerController {
     }
 
 
-
+    @GetMapping("/check-payment-status/{orderId}")
+    public ApiResponse checkOrderStatus(@PathVariable long orderId){
+      return customerService.checkPaymentStatus(orderId);
+    }
 
 
 

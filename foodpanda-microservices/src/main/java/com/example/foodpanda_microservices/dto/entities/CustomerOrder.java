@@ -1,5 +1,6 @@
 package com.example.foodpanda_microservices.dto.entities;
 
+import com.example.foodpanda_microservices.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class CustomerOrder {
     private LocalDateTime orderedAt;
     private String orderStatus;
     private String invoiceNo;
+    private PaymentStatus paymentStatus;
 
 
     @ManyToOne()

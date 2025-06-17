@@ -10,6 +10,7 @@ import com.example.foodpanda_microservices.dto.response.ApiResponse;
 import com.example.foodpanda_microservices.dto.response.CustomerGenerateOtpResponse;
 import com.example.foodpanda_microservices.dto.response.UpdateStockResponse;
 import com.example.foodpanda_microservices.enums.OrderStatus;
+import com.example.foodpanda_microservices.enums.PaymentStatus;
 import com.example.foodpanda_microservices.helperClasses.IdGenerator;
 import com.example.foodpanda_microservices.helperClasses.PinCodeMaster;
 import com.example.foodpanda_microservices.repository.CustomerLoginJpaRepository;
@@ -35,6 +36,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -534,6 +536,37 @@ public class CustomerServiceImplementation implements CustomerService {
         }
         menuService.uploadInvoiceFromBase64V1(orderDetailsList1, customerDetailsMap);
         return ApiResponse.prepareApiResponse(invoiceNo);
+    }
+
+    @Override
+    public ApiResponse checkPaymentStatus(long orderId) {
+        CustomerOrder orderDetails = null;
+        Optional<CustomerOrder> customerOrder = customerOrderJpaRepository.getOrderDetails(orderId);
+        if(customerOrder.isPresent()){
+            orderDetails = customerOrder.get();
+        }
+        else{
+            return ApiResponse.prepareFailureApiResponse("No Order Details Found");
+        }
+
+        if(ObjectUtils.isEmpty(orderDetails.getPaymentStatus())){
+            return ApiResponse.prepareFailureApiResponse("Payment not done yet");
+        }
+
+        if(!orderDetails.getOrderStatus().isEmpty() &&
+                (
+                orderDetails.getPaymentStatus().equals(PaymentStatus.PAID)) ||
+                orderDetails.getPaymentStatus().equals(PaymentStatus.HOLD) ||
+                orderDetails.getPaymentStatus().equals(PaymentStatus.CANCELLED) ||
+                orderDetails.getPaymentStatus().equals(PaymentStatus.ERROR)
+        )
+        {
+//            String status = PaymentStatus.HOLD.name();
+//            PaymentStatus status1 = PaymentStatus.valueOf("HOLD");
+            return ApiResponse.prepareApiResponse(orderDetails.getPaymentStatus());
+
+        }
+        return null;
     }
 
 

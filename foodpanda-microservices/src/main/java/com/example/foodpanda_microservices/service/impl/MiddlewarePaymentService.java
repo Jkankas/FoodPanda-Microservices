@@ -19,14 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 public class MiddlewarePaymentService {
 
     @Autowired
-    UtrJdbcRepository utrJdbcRepository;
+   private UtrJdbcRepository utrJdbcRepository;
 
     @Autowired
-    ObjectMapper mapper;
+   private ObjectMapper mapper;
 
 
     @Autowired
-    UtrJdbcRepository repository;
+  private   UtrJdbcRepository repository;
 
 
     @Autowired
@@ -41,19 +41,21 @@ public class MiddlewarePaymentService {
     public void pushMessageToKafkaConsumer(UtrRequest request) throws JsonProcessingException {
         log.info("Incoming Request,{}",request);
 //        String SerializedString = mapper.writeValueAsString(request);
+        System.out.println(request.getUtrNumber());
         jsonKafkaTemplate.send(TOPIC,"foodpanda_008", request.getUtrNumber());
         System.out.println("Message Sent : " + request);
     }
 
 
 
-    @KafkaListener(topics = "foodpanda-utr-service",groupId = "utr")
+    @KafkaListener(topics = "foodpanda-utr-service",groupId = "utr",autoStartup = "false")
     public void consumeMiddlewareResponse(String request) throws JsonMappingException, JsonProcessingException{
         try{
-//            PaymentUtrRequest DeserializedRequest = objectMapper.readValue(request,PaymentUtrRequest.class);
+            PaymentUtrRequest DeserializedRequest = mapper.readValue(request,PaymentUtrRequest.class);
             log.info("Deserialized PayoutUtmConsumerRequest: {}", request);
-            PaymentUtrRequest request1 = PaymentUtrRequest.builder().utrNumber(request).build();
-            repository.updateUtr(request1);
+//            PaymentUtrRequest request1 = PaymentUtrRequest.builder().utrNumber(request).build();
+            System.out.println(DeserializedRequest);
+            repository.updateUtr(DeserializedRequest);
         }catch (Exception e){
             log.info("Exception at Consumer",e);
             jsonKafkaTemplate.send("foodpanda-utr-service.DLT",request);
